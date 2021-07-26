@@ -31,6 +31,9 @@
     <ClInclude Include="ComplexMap.h">
       <Filter>Container</Filter>
     </ClInclude>
+    <ClInclude Include="ComplexIterator.h">
+      <Filter>Container</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ComplexLibrary.cpp">

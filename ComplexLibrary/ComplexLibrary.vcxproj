@@ -158,6 +158,7 @@ copy $(ProjectDir)*.h $(SolutionDir)lib\header\.</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ComplexIterator.h" />
     <ClInclude Include="ComplexLinkedList.h" />
     <ClInclude Include="ComplexMap.h" />
     <ClInclude Include="ComplexSingleton.h" />
