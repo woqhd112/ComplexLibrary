@@ -1,5 +1,4 @@
-#ifndef bruno_include_ComplexVector_H 
-#define bruno_include_ComplexVector_H 1
+#pragma once
 
 template <typename T>
 class ComplexVector
@@ -225,4 +224,3 @@ private:
 
 };
 
-#endif /* bruno_include_ComplexVector_H */

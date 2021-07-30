@@ -1,10 +1,7 @@
-#ifndef Koh_include_ComplexMap_H  
-#define Koh_include_ComplexMap_H 1
+#pragma once
 
 #include "ComplexVector.h"
 #include "ComplexLinkedList.h"
-
-#define USE_LINKEDLIST	0
 
 template <typename T, typename N>
 struct ComplexPair
@@ -91,6 +88,45 @@ public:
 		m_size++;
 	}
 
+	void insert(T key, N value)
+	{
+		Duplicate(key);
+
+		if (m_size + 1 > m_capacity)
+		{
+			m_keys.reserve(m_capacity * 2);
+			m_capacity *= 2;
+
+		}
+		m_keys.push_back(key);
+		m_pairs.push_tail(pair);
+		m_size++;
+	}
+
+	bool erase(T key)
+	{
+		if (m_size <= 0) throw "Empty Map";
+
+		bool bFind = false;
+		int i = 0;
+		for (i = 0; i < m_size; i++)
+		{
+			if (m_keys.at(i) == key)
+			{
+				bFind = true;
+				break;
+			}
+		}
+
+		if (!bFind)
+			return false;
+	
+		m_pairs.erase(i);
+		m_keys.erase(i);
+
+		return true;
+	}
+
 	iterator find(T key)
 	{
 		if (m_size <= 0) throw "Empty Map";
@@ -139,7 +175,7 @@ public:
 		m_pairs.clear();
 	}
 
-	ComplexMap<T, N>& operator = (const ComplexMap<T, N>& other)
+	ComplexMap<T, N>& operator = (ComplexMap<T, N>& other)
 	{
 		if (this != &other)
 		{
@@ -159,8 +195,10 @@ public:
 			m_size = other.m_size;
 			for (int i = 0; i < m_size; i++)
 			{
-				m_pairs.push_tail(other.m_pairs.at(i));
-				m_keys.push_back(other.m_pairs.at(i).key);
+				ComplexPair<T, N> pair = other.m_pairs.at(i);
+				T key = pair.key;
+				m_pairs.push_tail(pair);
+				m_keys.push_back(key);
 			}
 		}
 		return *this;
@@ -204,6 +242,3 @@ private:
 	}
 
 };
-
-
-#endif /* Koh_include_ComplexMap_H */

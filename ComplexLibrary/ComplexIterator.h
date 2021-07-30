@@ -1,18 +1,6 @@
-#ifndef Koh_include_ComplexIterator_H  
-#define Koh_include_ComplexIterator_H 1
+#pragma once
 
-template <typename T>
-struct ComplexNode
-{
-	T value;
-	struct ComplexNode<T>* next = nullptr;
-	ComplexNode() {}
-	ComplexNode(const T& value, ComplexNode<T>* ptr)
-	{
-		this->value = value;
-		this->next = ptr;
-	}
-};
+#include "ComplexNode.h"
 
 template <typename T>
 class ComplexIterator
@@ -32,7 +20,7 @@ public:
 
 	ComplexIterator& operator ++ ()
 	{
-		m_cur = m_cur->next;
+		m_cur = m_cur->m_next;
 		return *this;
 	}
 
@@ -43,7 +31,17 @@ public:
 		return tmp;
 	}
 
-	T& operator * ()
+	ComplexNode<T>& operator * ()
+	{
+		return *m_cur;
+	}
+
+	ComplexNode<T>* operator -> ()
+	{
+		return m_cur;
+	}
+
+	/*T& operator * ()
 	{
 		return m_cur->value;
 	}
@@ -51,7 +49,7 @@ public:
 	T* operator -> ()
 	{
 		return &m_cur->value;
-	}
+	}*/
 
 	bool operator == (const ComplexIterator& eq)
 	{
@@ -69,4 +67,3 @@ private:
 
 };
 
-#endif /* Koh_include_ComplexIterator_H */

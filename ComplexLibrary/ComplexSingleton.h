@@ -1,5 +1,4 @@
-#ifndef Koh_include_ComplexSingleton_H
-#define Koh_include_ComplexSingleton_H 1
+#pragma once
 
 template <typename T>
 class ComplexSingleton
@@ -49,5 +48,3 @@ private:
 };
 
 template<typename T> T* ComplexSingleton<T>::m_pInstance = NULL;
-
-#endif	/* Koh_include_ComplexSingleton_H */

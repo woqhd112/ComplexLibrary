@@ -5,11 +5,23 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Singleton">
-      <UniqueIdentifier>{e5ebea7a-6e90-4df3-bbd5-1d37de3c16fc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Container">
       <UniqueIdentifier>{2f14ef3b-354d-438f-a9bc-024d6b1fa5e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Variable">
+      <UniqueIdentifier>{90b3c2e1-00e8-40a3-9a66-08d13deefe11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Process">
+      <UniqueIdentifier>{e08b81cc-6bda-4354-b5ca-1d6004ddf054}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Process\Singleton">
+      <UniqueIdentifier>{e5ebea7a-6e90-4df3-bbd5-1d37de3c16fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Process\File">
+      <UniqueIdentifier>{ad1b190a-7f00-4efb-9a22-9bc69efb4c64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Process\XML">
+      <UniqueIdentifier>{cd23787e-1a92-4b16-974a-47209993e523}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -17,7 +29,7 @@
       <Filter>Container</Filter>
     </ClInclude>
     <ClInclude Include="ComplexSingleton.h">
-      <Filter>Singleton</Filter>
+      <Filter>Process\Singleton</Filter>
     </ClInclude>
     <ClInclude Include="framework.h">
       <Filter>소스 파일</Filter>
@@ -33,6 +45,27 @@
     </ClInclude>
     <ClInclude Include="ComplexIterator.h">
       <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexQueue.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexStack.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexNode.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexString.h">
+      <Filter>Variable</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexVariant.h">
+      <Filter>Variable</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexFile.h">
+      <Filter>Process\File</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexXMLParsor.h">
+      <Filter>Process\XML</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
