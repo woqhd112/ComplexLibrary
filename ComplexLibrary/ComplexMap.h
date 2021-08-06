@@ -9,6 +9,8 @@ struct ComplexPair
 	T key;
 	N value;
 
+	ComplexPair() {}
+	ComplexPair(T _key, N _value) { key = _key; value = _value; }
 	N operator = (N value)
 	{
 		this->value = value;
@@ -40,15 +42,15 @@ public:
 		m_size = 0;
 	}
 
-	ComplexMap(const ComplexMap<T, N>& ptr)
+	ComplexMap(ComplexMap<T, N>& ptr)
 	{
 		int nPtr_size = ptr.m_size;
 		int nPtr_capacity = ptr.m_capacity;
 
-		if (m_pairs != nullptr)
+		if (m_pairs.size() > 0)
 			m_pairs.clear();
 
-		if (m_keys != nullptr)
+		if (m_keys.size() > 0)
 		{
 			m_keys.erase(0, m_keys.size() - 1);
 			m_keys.clear();
@@ -58,8 +60,10 @@ public:
 
 		for (int i = 0; i < nPtr_size; i++)
 		{
-			m_pairs.push_tail(ptr.m_pairs.at(i));
-			m_keys.push_back(ptr[i].key);
+			ComplexPair<T, N> pair = ptr.m_pairs.at(i);
+			T key = pair.key;
+			m_pairs.push_tail(pair);
+			m_keys.push_back(key);
 		}
 
 		m_size = nPtr_size;
@@ -99,7 +103,7 @@ public:
 
 		}
 		m_keys.push_back(key);
-		m_pairs.push_tail(pair);
+		m_pairs.push_tail(ComplexPair<T, N>(key, value));
 		m_size++;
 	}
 
@@ -120,7 +124,7 @@ public:
 
 		if (!bFind)
 			return false;
-	
+
 		m_pairs.erase(i);
 		m_keys.erase(i);
 
@@ -242,3 +246,4 @@ private:
 	}
 
 };
+

@@ -23,6 +23,15 @@
     <Filter Include="Process\XML">
       <UniqueIdentifier>{cd23787e-1a92-4b16-974a-47209993e523}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Process\Thread">
+      <UniqueIdentifier>{8093c761-db93-4485-8396-dac0e3d9e108}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{ff267067-3dfd-4c91-8d1e-119b8d0c3571}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SQLite3">
+      <UniqueIdentifier>{ac006ed6-69e4-4327-b37a-3e06e266ce3f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ComplexLinkedList.h">
@@ -66,6 +75,30 @@
     </ClInclude>
     <ClInclude Include="ComplexXMLParsor.h">
       <Filter>Process\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexXMLNode.h">
+      <Filter>Process\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexXMLHandler.h">
+      <Filter>Process\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexThread.h">
+      <Filter>Process\Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexLock.h">
+      <Filter>Process\Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexUtility.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexCalculate.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexTime.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexDatabase.h">
+      <Filter>SQLite3</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

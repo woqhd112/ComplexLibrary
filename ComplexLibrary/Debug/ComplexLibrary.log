@@ -1,6 +1,28 @@
-﻿  Markup.cpp
-c:\program files (x86)\microsoft visual studio\2017\professional\vc\tools\msvc\14.16.27023\atlmfc\include\afx.h(24): fatal error C1189: #error:  Building MFC application with /MD[d] (CRT dll version) requires MFC shared dll version. Please #define _AFXDLL or do not use /MD[d]
-  Xsl.cpp
-c:\users\user\desktop\워크스페이스\work_vs2017\complexlibrary\complexlibrary\cxml\xsl.cpp(41): error C3861: 'VERIFY': 식별자를 찾을 수 없습니다.
-c:\users\user\desktop\워크스페이스\work_vs2017\complexlibrary\complexlibrary\cxml\xsl.cpp(127): error C3861: 'VERIFY': 식별자를 찾을 수 없습니다.
-  코드를 생성하고 있습니다...
+﻿  ComplexLibrary.cpp
+  ComplexLibrary.vcxproj -> C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\Debug\ComplexLibrary.lib
+  C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\Debug\ComplexLibrary.lib
+          1개 파일이 복사되었습니다.
+  C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\ComplexCalculate.h
+  C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\ComplexDatabase.h
+  C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\ComplexFile.h
+  C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\ComplexIterator.h
+  C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\ComplexLinkedList.h
+  C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\ComplexLock.h
+  C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\ComplexMap.h
+  C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\ComplexNode.h
+  C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\ComplexQueue.h
+  C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\ComplexSingleton.h
+  C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\ComplexStack.h
+  C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\ComplexString.h
+  C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\ComplexThread.h
+  C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\ComplexTime.h
+  C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\ComplexUtility.h
+  C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\ComplexVariant.h
+  C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\ComplexVector.h
+  C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\ComplexXMLHandler.h
+  C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\ComplexXMLNode.h
+  C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\ComplexXMLParsor.h
+  C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\framework.h
+  C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\pch.h
+  C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\sqlite3.h
+         23개 파일이 복사되었습니다.

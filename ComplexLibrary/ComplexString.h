@@ -108,11 +108,11 @@ public:
 		va_list args;
 		__crt_va_start(args, format);
 
-		int format_size = strlen(format) + 1 + 1;
+		//int format_size = strlen(format) + 1 + 1 + 1;
 
 		char tmp[4096];
 
-		m_size = static_cast<int>(vsnprintf(tmp, format_size, format, args) + 1);
+		m_size = static_cast<int>(vsnprintf(tmp, 4096, format, args) + 1);
 
 		if (m_buf != nullptr)
 			delete[] m_buf;
@@ -132,11 +132,11 @@ public:
 		va_list args;
 		__crt_va_start(args, format);
 
-		int format_size = strlen(format) + 1 + 1;
+		//int format_size = strlen(format) + 1 + 1;
 
 		char tmp[4096];
 
-		int arg_size = static_cast<int>(vsnprintf(tmp, format_size, format, args) + 1);
+		int arg_size = static_cast<int>(vsnprintf(tmp, 4096, format, args) + 1);
 
 		int before_size = m_size;
 		char* before_buf = new char[m_size];
@@ -236,7 +236,7 @@ public:
 
 	bool IsEmpty()
 	{
-		return (m_size <= 0);
+		return (m_size <= 1);
 	}
 
 	void Trim()
@@ -306,7 +306,12 @@ public:
 		if (find_cnt <= 0)
 			return false;
 
-		return loopSplit(contain, m_buf, div, 0);;
+		if (loopSplit(contain, m_buf, div, 0) == false)
+		{
+			if (contain.empty())
+				return false;
+		}
+		return true;
 	}
 
 	bool Split(ComplexVector<ComplexString>& contain, char div)
@@ -323,7 +328,12 @@ public:
 		if (find_cnt <= 0)
 			return false;
 
-		return loopSplit(contain, m_buf, div, 0);;
+		if (loopSplit(contain, m_buf, div, 0) == false)
+		{
+			if (contain.empty())
+				return false;
+		}
+		return true;
 	}
 
 	bool Erase(int index)
@@ -339,9 +349,12 @@ public:
 			newBuf[i] = m_buf[i];
 		}
 		i++;
-		for (int j = 0; j < m_size - 1 - 1; j++)
+		if (i < m_size - 1 - 1)
 		{
-			newBuf[j + i - 1] = m_buf[j + i];
+			for (int j = 0; j < m_size - 1 - 1; j++)
+			{
+				newBuf[j + i - 1] = m_buf[j + i];
+			}
 		}
 		newBuf[m_size - 1 - 1] = '\0';
 
@@ -360,6 +373,23 @@ public:
 		m_size--;
 
 		return true;
+	}
+
+	ComplexString GetText(int startidx, int endidx)
+	{
+		if (endidx - startidx <= 0)
+			return "";
+		ComplexString at_string;
+		int at_size = endidx - startidx + 1;
+		char* at_buf = new char[at_size + 1];
+		for (int i = 0; i < at_size; i++)
+		{
+			at_buf[i] = m_buf[i + startidx];
+		}
+		at_buf[at_size] = '\0';
+		at_string = at_buf;
+
+		return at_string;
 	}
 
 	void Clear()
@@ -707,6 +737,7 @@ private:
 			find_index = h;
 			return true;
 		}
+		h++;
 
 		return loopFind(findbuf, find_index, h);
 	}
@@ -816,13 +847,21 @@ private:
 		delete[] tmp1;
 		delete[] tmp2;
 
+		if (preFindString.m_size <= 1)
+			return false;
 
 		contain.push_back(preFindString);
 
 		if (sufFindString.m_size <= 1)
 			return false;
 
-		return loopSplit(contain, sufFindString.m_buf, div, matrix_cnt + 1);
+		if (loopSplit(contain, sufFindString.m_buf, div, matrix_cnt + 1) == false)
+		{
+			if (contain.size() == 0)
+				return false;
+		}
+
+		return true;
 	}
 
 

@@ -1,5 +1,4 @@
-#ifndef bruno_include_ComplexVector_H 
-#define bruno_include_ComplexVector_H 1
+#pragma once
 
 template <typename T>
 class ComplexVector
@@ -13,7 +12,7 @@ public:
 		m_size = 0;
 	}
 
-	ComplexVector(const ComplexVector& ptr)
+	ComplexVector(const ComplexVector<T>& ptr)
 	{
 		int nPtr_size = ptr.m_size;
 		int nPtr_capacity = ptr.m_capacity;
@@ -57,9 +56,9 @@ public:
 			m_capacity *= 2;
 
 		}
-		m_size++;
 
 		m_ptr[m_size] = value;
+		m_size++;
 	}
 
 	void reserve(int capacity)
@@ -80,6 +79,9 @@ public:
 
 	T& at(int idx)
 	{
+		if (m_size <= 0) throw "Index Out of Bound";
+		if ((m_size - 1) < idx) throw "Index Out of Bound";
+
 		return m_ptr[idx];
 	}
 
@@ -103,10 +105,68 @@ public:
 		return m_ptr + m_size;
 	}
 
+	void erase(int idx)
+	{
+		if (m_size <= 0) throw "Index Out of Bound";
+		if ((m_size - 1) < idx) throw "Index Out of Bound";
+
+		T* tmp = new T[m_capacity];
+		int tmpidx = 0;
+
+		for (int i = 0; i < idx; i++)
+		{
+			tmp[tmpidx] = m_ptr[i];
+			tmpidx++;
+		}
+
+		for (int i = idx + 1; i < m_size; i++)
+		{
+			tmp[tmpidx] = m_ptr[i];
+			tmpidx++;
+		}
+
+		delete[] m_ptr;
+		m_ptr = tmp;
+		m_size--;
+	}
+
+	void erase(int startidx, int endidx)
+	{
+		if (m_size <= 0) throw "Index Out of Bound";
+		if ((m_size - 1) < startidx) throw "Index Out of Bound";
+		if ((m_size - 1) < endidx) throw "Index Out of Bound";
+		if (endidx < startidx) throw "Index Out of Bound";
+
+		T* tmp = new T[m_capacity];
+		int tmpidx = 0;
+
+		for (int i = 0; i < startidx; i++)
+		{
+			tmp[tmpidx] = m_ptr[i];
+			tmpidx++;
+		}
+
+		for (int i = endidx + 1; i < m_size; i++)
+		{
+			tmp[tmpidx] = m_ptr[i];
+			tmpidx++;
+		}
+
+		delete[] m_ptr;
+		m_ptr = tmp;
+		m_size = m_size - (endidx - startidx + 1);
+	}
+
 	void pop_back()
 	{
-		if (--m_size < 0)
+		if (m_size <= 0)
+		{
 			m_size = 0;
+		}
+		else
+		{
+			m_size--;
+		}
 	}
 
 	void clear()
@@ -164,4 +224,3 @@ private:
 
 };
 
-#endif /* bruno_include_ComplexVector_H */
