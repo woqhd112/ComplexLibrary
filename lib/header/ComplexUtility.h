@@ -7,15 +7,15 @@
 namespace ComplexUtility
 {
 	// 2~16 진법까지 지원
-	ComplexString ConvertNotation(int befor_notation, int after_notation, ComplexString inputValue)
+	ComplexString ConvertNotation(int before_notation, int after_notation, ComplexString inputValue)
 	{
-		if (befor_notation < 2 || befor_notation >16)
+		if (before_notation < 2 || before_notation >16)
 			return "";
 
 		if (after_notation < 2 || after_notation > 16)
 			return "";
 
-		return InputTenToSet(after_notation, OutputSetToTen(befor_notation, inputValue));
+		return InputTenToSet(after_notation, OutputSetToTen(before_notation, inputValue));
 	}
 
 	// 명도가 높으면 밝은색 낮으면 어두운색

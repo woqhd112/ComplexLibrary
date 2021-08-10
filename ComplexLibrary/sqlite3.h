@@ -67,7 +67,7 @@ extern "C" {
 ** that we have taken it all out and gone back to using simple
 ** noop macros.
 */
-#define SQLITE_DEPRECATED
+//#define SQLITE_DEPRECATED
 #define SQLITE_EXPERIMENTAL
 
 /*
@@ -3734,12 +3734,12 @@ SQLITE_API int sqlite3_create_function_v2(
 ** using these functions, we are not going to tell you what they do.
 */
 #ifndef SQLITE_OMIT_DEPRECATED
-SQLITE_API SQLITE_DEPRECATED int sqlite3_aggregate_count(sqlite3_context*);
-SQLITE_API SQLITE_DEPRECATED int sqlite3_expired(sqlite3_stmt*);
-SQLITE_API SQLITE_DEPRECATED int sqlite3_transfer_bindings(sqlite3_stmt*, sqlite3_stmt*);
-SQLITE_API SQLITE_DEPRECATED int sqlite3_global_recover(void);
-SQLITE_API SQLITE_DEPRECATED void sqlite3_thread_cleanup(void);
-SQLITE_API SQLITE_DEPRECATED int sqlite3_memory_alarm(void(*)(void*,sqlite3_int64,int),void*,sqlite3_int64);
+//SQLITE_API SQLITE_DEPRECATED int sqlite3_aggregate_count(sqlite3_context*);
+//SQLITE_API SQLITE_DEPRECATED int sqlite3_expired(sqlite3_stmt*);
+//SQLITE_API SQLITE_DEPRECATED int sqlite3_transfer_bindings(sqlite3_stmt*, sqlite3_stmt*);
+//SQLITE_API SQLITE_DEPRECATED int sqlite3_global_recover(void);
+//SQLITE_API SQLITE_DEPRECATED void sqlite3_thread_cleanup(void);
+//SQLITE_API SQLITE_DEPRECATED int sqlite3_memory_alarm(void(*)(void*,sqlite3_int64,int),void*,sqlite3_int64);
 #endif
 
 /*
@@ -4538,7 +4538,7 @@ SQLITE_API sqlite3_int64 sqlite3_soft_heap_limit64(sqlite3_int64 N);
 ** only.  All new applications should use the
 ** [sqlite3_soft_heap_limit64()] interface rather than this one.
 */
-SQLITE_API SQLITE_DEPRECATED void sqlite3_soft_heap_limit(int N);
+//SQLITE_API SQLITE_DEPRECATED void sqlite3_soft_heap_limit(int N);
 
 
 /*

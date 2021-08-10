@@ -61,7 +61,7 @@ public:
 			case 2:
 				return_day = 28;
 				year_error = table.year - 2012;
-				if (year_error % 4 == 0)	// À±´Þ
+				if (abs(year_error) % 4 == 0)	// À±´Þ
 				{
 					if (table.month == 2)
 						return_day = 29;

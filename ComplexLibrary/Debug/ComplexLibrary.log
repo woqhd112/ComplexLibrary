@@ -1,5 +1,8 @@
-﻿  ComplexLibrary.cpp
+﻿  pch.cpp
+  ComplexLibrary.cpp
+  sqlite3.c
   ComplexLibrary.vcxproj -> C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\Debug\ComplexLibrary.lib
+  디렉터리가 비어 있지 않습니다.
   C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\Debug\ComplexLibrary.lib
           1개 파일이 복사되었습니다.
   C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\ComplexCalculate.h
@@ -25,4 +28,5 @@
   C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\framework.h
   C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\pch.h
   C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\sqlite3.h
-         23개 파일이 복사되었습니다.
+  C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\sqlite3ext.h
+         24개 파일이 복사되었습니다.

@@ -162,6 +162,7 @@ copy $(ProjectDir)*.h $(SolutionDir)lib\header\.</Command>
     <ClInclude Include="ComplexIterator.h" />
     <ClInclude Include="ComplexLinkedList.h" />
     <ClInclude Include="ComplexLock.h" />
+    <ClInclude Include="ComplexLog.h" />
     <ClInclude Include="ComplexMap.h" />
     <ClInclude Include="ComplexNode.h" />
     <ClInclude Include="ComplexQueue.h" />
@@ -180,6 +181,8 @@ copy $(ProjectDir)*.h $(SolutionDir)lib\header\.</Command>
     <ClInclude Include="framework.h" />
     <ClInclude Include="ComplexFile.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="sqlite3.h" />
+    <ClInclude Include="sqlite3ext.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ComplexLibrary.cpp" />
@@ -189,6 +192,16 @@ copy $(ProjectDir)*.h $(SolutionDir)lib\header\.</Command>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="sqlite3.c">
+      <SDLCheck Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</SDLCheck>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdafx.h</PrecompiledHeaderFile>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">SQLITE3_EXPORTS;SQLITE_ENABLE_FTS3;SQLITE_ENABLE_RTREE;SQLITE_ENABLE_COLUMN_METADATA;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="sqlite3.def" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

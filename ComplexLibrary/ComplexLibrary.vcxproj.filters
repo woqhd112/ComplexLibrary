@@ -32,6 +32,9 @@
     <Filter Include="SQLite3">
       <UniqueIdentifier>{ac006ed6-69e4-4327-b37a-3e06e266ce3f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Log">
+      <UniqueIdentifier>{41112e5e-cc16-48d6-bac0-bb2fbbe0aff4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ComplexLinkedList.h">
@@ -100,6 +103,15 @@
     <ClInclude Include="ComplexDatabase.h">
       <Filter>SQLite3</Filter>
     </ClInclude>
+    <ClInclude Include="sqlite3.h">
+      <Filter>SQLite3</Filter>
+    </ClInclude>
+    <ClInclude Include="sqlite3ext.h">
+      <Filter>SQLite3</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexLog.h">
+      <Filter>Log</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ComplexLibrary.cpp">
@@ -108,5 +120,13 @@
     <ClCompile Include="pch.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="sqlite3.c">
+      <Filter>SQLite3</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="sqlite3.def">
+      <Filter>SQLite3</Filter>
+    </None>
   </ItemGroup>
 </Project>

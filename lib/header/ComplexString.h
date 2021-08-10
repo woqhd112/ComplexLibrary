@@ -542,6 +542,11 @@ public:
 		return m_buf;
 	}
 
+	operator char()
+	{
+		return m_buf[0];
+	}
+
 	ComplexString& operator = (const char* buf)
 	{
 		m_size = static_cast<int>(strlen(buf)) + 1;
