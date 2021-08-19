@@ -2,6 +2,7 @@
 
 #include "ComplexString.h"
 #include "ComplexCalculate.h"
+#include "ComplexRandom.h"
 
 namespace ComplexUtility
 {
@@ -200,5 +201,17 @@ namespace ComplexUtility
 			returnBuf.Format("%s.%s", share_buf.GetBuffer(), remainder_buf.GetBuffer());
 
 		return returnBuf;
+	}
+
+	int Random()
+	{
+		ComplexRandom ran;
+		return ran.Random();
+	}
+
+	int Random(int start_range, int end_range)
+	{
+		ComplexRandom ran;
+		return ran.Random(start_range, end_range);
 	}
 }

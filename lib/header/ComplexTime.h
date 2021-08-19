@@ -62,7 +62,7 @@ public:
 				return_day = 28;
 				year_error = table.year - 2012;
 				if (abs(year_error) % 4 == 0)	// À±´Ş
-				{
+				{ 
 					if (table.month == 2)
 						return_day = 29;
 				}

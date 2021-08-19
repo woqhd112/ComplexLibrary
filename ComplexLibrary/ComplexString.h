@@ -4,6 +4,9 @@
 
 #include "ComplexVector.h"
 #include "ComplexLinkedList.h"
+#include "ComplexFormat.h"
+
+#define USE_MYFORMAT	1
 
 class ComplexString
 {
@@ -110,6 +113,22 @@ public:
 
 		//int format_size = strlen(format) + 1 + 1 + 1;
 
+
+#if USE_MYFORMAT
+		ComplexFormat formatting;
+		const char* tmp = formatting.GetFormatString(format, args);
+
+		m_size = strlen(tmp) + 1;
+
+		if (m_buf != nullptr)
+			delete[] m_buf;
+
+		m_buf = new char[m_size];
+		for (int i = 0; i < m_size - 1; i++)
+		{
+			m_buf[i] = tmp[i];
+		}
+#elif
 		char tmp[4096];
 
 		m_size = static_cast<int>(vsnprintf(tmp, 4096, format, args) + 1);
@@ -122,6 +141,7 @@ public:
 		{
 			m_buf[i] = tmp[i];
 		}
+#endif
 		m_buf[m_size - 1] = '\0';
 
 		__crt_va_end(args);
@@ -132,11 +152,15 @@ public:
 		va_list args;
 		__crt_va_start(args, format);
 
-		//int format_size = strlen(format) + 1 + 1;
+#if USE_MYFORMAT
+		ComplexFormat formatting;
+		const char* tmp = formatting.GetFormatString(format, args);
 
+		int arg_size = strlen(tmp) + 1;
+#elif
 		char tmp[4096];
-
 		int arg_size = static_cast<int>(vsnprintf(tmp, 4096, format, args) + 1);
+#endif
 
 		int before_size = m_size;
 		char* before_buf = new char[m_size];
@@ -157,9 +181,9 @@ public:
 		{
 			m_buf[i + before_size - 1] = tmp[i];
 		}
+
 		m_buf[m_size - 1] = '\0';
 
-		delete[] before_buf;
 
 		__crt_va_end(args);
 	}

@@ -1,7 +1,8 @@
 #pragma once
 
-#include <thread>
 #include "ComplexLock.h"
+
+unsigned __stdcall MainThread(void* param);
 
 class ComplexThread
 {
@@ -14,54 +15,66 @@ public:
 	};
 
 	ComplexThread()
+		: m_sleep(false)
 	{
 		m_threadStatus = THREAD_STOP;
 	}
 
 	virtual ~ComplexThread()
 	{
-		Stop();
+
 	}
 
 	bool Start()
 	{
-		ComplexGuardLock lock(&m_lock);
+		//ComplexUniqueLock lock(&m_lock);
 
 		if (m_threadStatus == THREAD_RUNNING)
 			return false;
 
-		m_thread = std::thread(MainThread, this);
 		m_threadStatus = THREAD_RUNNING;
+		m_thread = std::thread(MainThread, this);
 
 		return true;
 	}
 
 	bool Stop()
 	{
-		ComplexGuardLock lock(&m_lock);
+		//ComplexUniqueLock lock(&m_lock);
 
 		if (m_threadStatus == THREAD_STOP)
 			return false;
 
 		m_threadStatus = THREAD_STOP;
+		return true;
 	}
 
 	void Join()
 	{
-		ComplexGuardLock lock(&m_lock);
+		//ComplexUniqueLock lock(&m_lock);
 
 		if (m_thread.joinable())
 		{
-			m_thread.join();
 			m_threadStatus = THREAD_STOP;
+			m_thread.join();
 		}
 	}
 
 	bool IsRunning()
 	{
-		ComplexGuardLock lock(&m_lock);
+		//ComplexUniqueLock lock(&m_lock);
 
 		return m_threadStatus == THREAD_RUNNING;
+	}
+
+	static void Sleep(int millisecond)
+	{
+		std::this_thread::sleep_for(std::chrono::milliseconds(millisecond));
+	}
+
+	static void Yield()
+	{
+		std::this_thread::yield();
 	}
 
 	virtual void Run() = 0;
@@ -70,7 +83,9 @@ private:
 
 	ThreadStatus m_threadStatus;
 	std::thread m_thread;
-	ComplexLock m_lock;
+	//ComplexLock m_lock;
+
+	bool m_sleep;
 
 };
 
@@ -78,4 +93,6 @@ unsigned __stdcall MainThread(void* param)
 {
 	ComplexThread* pThis = (ComplexThread*)param;
 	pThis->Run();
+
+	return 0;
 }

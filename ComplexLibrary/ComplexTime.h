@@ -103,6 +103,19 @@ public:
 			return return_day;
 		}
 
+		operator unsigned long long()
+		{
+			unsigned long long sum = 0;
+			sum += this->second;
+			sum += (this->minute * 60);
+			sum += (this->hour * 60 * 60);
+			sum += (this->day * 60 * 60 * 24);
+			sum += (this->month * 60 * 60 * 24 * 30);
+			sum += (this->year * 60 * 60 * 24 * 30 * 12);
+
+			return sum;
+		}
+
 		bool operator == (ComplexTimeTable& timetable)
 		{
 			return (this->year == timetable.year && this->month == timetable.month && this->day == timetable.day && this->hour == timetable.hour && this->minute == timetable.minute && this->second == timetable.second);
@@ -536,10 +549,10 @@ public:
 	static ComplexTimeTable GetCurrentTime()
 	{
 		time_t times = time(NULL);
-		tm* t;
-		localtime_s(t, &times);
+		tm t;
+		localtime_s(&t, &times);
 		ComplexTimeTable timeTable;
-		timeTable.Set(t);
+		timeTable.Set(&t);
 
 		return timeTable;
 	}

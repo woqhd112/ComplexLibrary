@@ -35,6 +35,9 @@
     <Filter Include="Log">
       <UniqueIdentifier>{41112e5e-cc16-48d6-bac0-bb2fbbe0aff4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Process\Format">
+      <UniqueIdentifier>{20120385-41c5-489f-b2e4-356f9c1f5d6b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ComplexLinkedList.h">
@@ -111,6 +114,24 @@
     </ClInclude>
     <ClInclude Include="ComplexLog.h">
       <Filter>Log</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexPool.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexConnectionPool.h">
+      <Filter>SQLite3</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexCondition.h">
+      <Filter>Process\Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexUniqueQueue.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexFormat.h">
+      <Filter>Process\Format</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexRandom.h">
+      <Filter>Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

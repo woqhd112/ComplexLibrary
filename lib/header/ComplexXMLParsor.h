@@ -2,6 +2,7 @@
 
 #include "ComplexFile.h"
 #include "ComplexXMLNode.h"
+#include "ComplexUtility.h"
 
 #define OPEN_TAG "<"
 #define CLOSE_TAG ">"
@@ -343,25 +344,6 @@ private:
 		}
 	}
 
-	ComplexString GetText(int begin_idx, int end_idx, ComplexString& doc)
-	{
-		if (end_idx - begin_idx <= 0)
-			return "";
-		int text_size = end_idx - begin_idx + 1;
-		char* text_buf = new char[text_size + 1];
-		int buf_idx = 0;
-		for (int i = begin_idx; i <= end_idx; i++)
-		{
-			text_buf[buf_idx] = doc[i];
-			buf_idx++;
-		}
-		text_buf[text_size] = '\0';
-		ComplexString text = text_buf;
-		delete[] text_buf;
-
-		return text;
-	}
-
 	bool SplitAttr(ComplexXMLNode* currentElem, ComplexString& buf)
 	{
 		const char* buf_buffer = buf.GetBuffer();
@@ -429,7 +411,7 @@ private:
 		int open_tag = doc.Find(ANNOTATION_OPEN_TAG);
 		int close_tag = doc.Find(ANNOTATION_CLOSE_TAG);
 
-		ComplexString annotation_text = GetText(open_tag + 3, close_tag + 2, m_doc);
+		ComplexString annotation_text = ComplexUtility::GetText(open_tag + 3, close_tag + 2, m_doc);
 	}
 
 	bool ValidateTag(ComplexString& checkDoc)
@@ -479,7 +461,7 @@ private:
 			bNotChild = true;
 			// </ 이 아니라 /> 인 태그
 			int end_tag_idx = close_tag - 1;
-			ComplexString elemTag = GetText(0, end_tag_idx, tag);
+			ComplexString elemTag = ComplexUtility::GetText(0, end_tag_idx, tag);
 			elemTag.Trim();
 
 			// 속성 파싱
@@ -501,12 +483,12 @@ private:
 				// </ 포함된 태그  
 				int end_tag_idx = close_tag - 2;	// length of <TagName ...> ...
 				close_tag = close_tag + elemName.GetLength() + 1;		// length of <TagName ...> ... </TagName> 
-				ComplexString elemTag = GetText(0, end_tag_idx, tag);
+				ComplexString elemTag = ComplexUtility::GetText(0, end_tag_idx, tag);
 				elemTag.Trim();
 
 				// 속성 파싱
 				int attr_end_idx = elemTag.Find(">");
-				ComplexString attr = GetText(0, attr_end_idx, elemTag);
+				ComplexString attr = ComplexUtility::GetText(0, attr_end_idx, elemTag);
 				attr.RemoveAll("<");
 				attr.RemoveAll(">");
 				attr.Remove(elemName);
@@ -514,7 +496,7 @@ private:
 				SplitAttr(currentElem, attr);
 
 				// 자식 파싱 (자식이 있을수 있으니 태그 검사는 안해도됨)
-				ComplexString childElemBuf = GetText(attr_end_idx + 1, end_tag_idx, tag);
+				ComplexString childElemBuf = ComplexUtility::GetText(attr_end_idx + 1, end_tag_idx, tag);
 
 				if (childElemBuf != "")
 				{
@@ -546,7 +528,7 @@ private:
 
 
 		// 처리 완료한 태그 뒤의 친구 태그 처리
-		ComplexString nextElemBuf = GetText(close_tag + 1, tag.GetLength(), tag);
+		ComplexString nextElemBuf = ComplexUtility::GetText(close_tag + 1, tag.GetLength(), tag);
 		// 여기 처리 트림 및..
 		if (!nextElemBuf.IsEmpty())
 		{
