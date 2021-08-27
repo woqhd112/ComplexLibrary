@@ -2,10 +2,8 @@
 
 #include <time.h>
 
-class ComplexTime
+namespace ComplexLibrary
 {
-public:
-
 	// + 연산은 초단위로 계산됨
 	struct ComplexTimeTable
 	{
@@ -536,27 +534,34 @@ public:
 		}
 	};
 
-	ComplexTime()
+	class ComplexTime
 	{
+	public:
 
-	}
+		
 
-	~ComplexTime()
-	{
+		ComplexTime()
+		{
 
-	}
+		}
 
-	static ComplexTimeTable GetCurrentTime()
-	{
-		time_t times = time(NULL);
-		tm t;
-		localtime_s(&t, &times);
-		ComplexTimeTable timeTable;
-		timeTable.Set(&t);
+		virtual ~ComplexTime()
+		{
 
-		return timeTable;
-	}
+		}
 
-private:
+		static ComplexTimeTable GetCurrentTime()
+		{
+			time_t times = time(NULL);
+			tm t;
+			localtime_s(&t, &times);
+			ComplexTimeTable timeTable;
+			timeTable.Set(&t);
 
-};
+			return timeTable;
+		}
+
+	private:
+
+	};
+}

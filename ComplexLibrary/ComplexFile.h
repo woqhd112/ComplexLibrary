@@ -4,119 +4,121 @@
 #include <fstream>
 #include "ComplexString.h"
 
-class ComplexFile
+namespace ComplexLibrary
 {
-public:
-
-	ComplexFile()
+	class ComplexFile
 	{
+	public:
 
-	}
-
-	ComplexFile(ComplexString path)
-	{
-		m_filePath = path;
-	}
-
-	~ComplexFile()
-	{
-
-	}
-
-	ComplexString GetPath() const
-	{
-		return m_filePath;
-	}
-
-	bool Read(ComplexString& buf)
-	{
-		if (buf.GetLength() > 4096)
-			return false;
-
-		std::ifstream read_file;
-		read_file.open(m_filePath.GetBuffer());
-
-		if (!read_file.is_open())
+		ComplexFile()
 		{
+
+		}
+
+		ComplexFile(ComplexString path)
+		{
+			m_filePath = path;
+		}
+
+		~ComplexFile()
+		{
+
+		}
+
+		ComplexString GetPath() const
+		{
+			return m_filePath;
+		}
+
+		bool Read(ComplexString& buf)
+		{
+			if (buf.GetLength() > 4096)
+				return false;
+
+			std::ifstream read_file;
+			read_file.open(m_filePath.GetBuffer());
+
+			if (!read_file.is_open())
+			{
+				read_file.close();
+				return false;
+			}
+
+			while (!read_file.eof())
+			{
+				char arr[4096];
+				read_file.getline(arr, 4096);
+				buf.AppendString(arr);
+				buf.AppendString("\n");
+			}
+
 			read_file.close();
-			return false;
+			return true;
 		}
 
-		while (!read_file.eof())
+		bool Read(ComplexString path, ComplexString& buf)
 		{
-			char arr[4096];
-			read_file.getline(arr, 4096);
-			buf.AppendString(arr);
-			buf.AppendString("\n");
-		}
+			if (buf.GetLength() > 4096)
+				return false;
 
-		read_file.close();
-		return true;
-	}
+			std::ifstream read_file;
+			read_file.open(path.GetBuffer());
 
-	bool Read(ComplexString path, ComplexString& buf)
-	{
-		if (buf.GetLength() > 4096)
-			return false;
+			if (!read_file.is_open())
+			{
+				read_file.close();
+				return false;
+			}
 
-		std::ifstream read_file;
-		read_file.open(path.GetBuffer());
+			while (!read_file.eof())
+			{
+				char arr[4096];
+				read_file.getline(arr, 4096);
+				buf.AppendString(arr);
+				buf.AppendString("\n");
+			}
 
-		if (!read_file.is_open())
-		{
 			read_file.close();
-			return false;
+			return true;
 		}
 
-		while (!read_file.eof())
+		bool Write(ComplexString buf)
 		{
-			char arr[4096];
-			read_file.getline(arr, 4096);
-			buf.AppendString(arr);
-			buf.AppendString("\n");
-		}
+			std::ofstream write_file;
+			write_file.open(m_filePath.GetBuffer());
 
-		read_file.close();
-		return true;
-	}
+			if (!write_file.is_open())
+			{
+				write_file.close();
+				return false;
+			}
 
-	bool Write(ComplexString buf)
-	{
-		std::ofstream write_file;
-		write_file.open(m_filePath.GetBuffer());
+			write_file.write(buf.GetBuffer(), buf.GetLength());
 
-		if (!write_file.is_open())
-		{
 			write_file.close();
-			return false;
+			return true;
 		}
 
-		write_file.write(buf.GetBuffer(), buf.GetLength());
-
-		write_file.close();
-		return true;
-	}
-
-	bool Write(ComplexString path, ComplexString buf)
-	{
-		std::ofstream write_file;
-		write_file.open(path.GetBuffer());
-
-		if (!write_file.is_open())
+		bool Write(ComplexString path, ComplexString buf)
 		{
+			std::ofstream write_file;
+			write_file.open(path.GetBuffer());
+
+			if (!write_file.is_open())
+			{
+				write_file.close();
+				return false;
+			}
+
+			write_file.write(buf.GetBuffer(), buf.GetLength());
+
 			write_file.close();
-			return false;
+			return true;
 		}
 
-		write_file.write(buf.GetBuffer(), buf.GetLength());
+	private:
 
-		write_file.close();
-		return true;
-	}
+		ComplexString m_filePath;
 
-private:
-
-	ComplexString m_filePath;
-
-};
-
+	};
+}

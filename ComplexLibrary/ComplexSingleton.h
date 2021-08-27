@@ -1,50 +1,53 @@
 #pragma once
 
-template <typename T>
-class ComplexSingleton
+namespace ComplexLibrary
 {
-protected:
-	ComplexSingleton() {}
-	virtual ~ComplexSingleton() {}
-
-public:
-	static T& GetInstance()
+	template <typename T>
+	class ComplexSingleton
 	{
-		return *CreateInstance();
-	}
+	protected:
+		ComplexSingleton() {}
+		virtual ~ComplexSingleton() {}
 
-	static T* GetInstancePtr()
-	{
-		return CreateInstance();
-	}
-
-	static void DestroyInstance()
-	{
-		if (m_pInstance != NULL)
+	public:
+		static T& GetInstance()
 		{
-			delete m_pInstance;
-			m_pInstance = NULL;
-		}
-	}
-
-private:
-
-	static T* CreateInstance()
-	{
-		T* tmp = m_pInstance;
-
-		if (tmp == NULL)
-		{
-			tmp = new T;
-			m_pInstance = tmp;
+			return *CreateInstance();
 		}
 
-		return tmp;
-	}
+		static T* GetInstancePtr()
+		{
+			return CreateInstance();
+		}
+
+		static void DestroyInstance()
+		{
+			if (m_pInstance != NULL)
+			{
+				delete m_pInstance;
+				m_pInstance = NULL;
+			}
+		}
+
+	private:
+
+		static T* CreateInstance()
+		{
+			T* tmp = m_pInstance;
+
+			if (tmp == NULL)
+			{
+				tmp = new T;
+				m_pInstance = tmp;
+			}
+
+			return tmp;
+		}
 
 
-	static T* m_pInstance;
+		static T* m_pInstance;
 
-};
+	};
 
-template<typename T> T* ComplexSingleton<T>::m_pInstance = NULL;
+	template<typename T> T* ComplexSingleton<T>::m_pInstance = NULL;
+}

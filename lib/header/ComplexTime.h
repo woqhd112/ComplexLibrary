@@ -2,10 +2,8 @@
 
 #include <time.h>
 
-class ComplexTime
+namespace ComplexLibrary
 {
-public:
-
 	// + 연산은 초단위로 계산됨
 	struct ComplexTimeTable
 	{
@@ -62,7 +60,7 @@ public:
 				return_day = 28;
 				year_error = table.year - 2012;
 				if (abs(year_error) % 4 == 0)	// 윤달
-				{ 
+				{
 					if (table.month == 2)
 						return_day = 29;
 				}
@@ -101,6 +99,19 @@ public:
 				break;
 			}
 			return return_day;
+		}
+
+		operator unsigned long long()
+		{
+			unsigned long long sum = 0;
+			sum += this->second;
+			sum += (this->minute * 60);
+			sum += (this->hour * 60 * 60);
+			sum += (this->day * 60 * 60 * 24);
+			sum += (this->month * 60 * 60 * 24 * 30);
+			sum += (this->year * 60 * 60 * 24 * 30 * 12);
+
+			return sum;
 		}
 
 		bool operator == (ComplexTimeTable& timetable)
@@ -523,27 +534,34 @@ public:
 		}
 	};
 
-	ComplexTime()
+	class ComplexTime
 	{
+	public:
 
-	}
+		
 
-	~ComplexTime()
-	{
+		ComplexTime()
+		{
 
-	}
+		}
 
-	static ComplexTimeTable GetCurrentTime()
-	{
-		time_t times = time(NULL);
-		tm* t;
-		localtime_s(t, &times);
-		ComplexTimeTable timeTable;
-		timeTable.Set(t);
+		virtual ~ComplexTime()
+		{
 
-		return timeTable;
-	}
+		}
 
-private:
+		static ComplexTimeTable GetCurrentTime()
+		{
+			time_t times = time(NULL);
+			tm t;
+			localtime_s(&t, &times);
+			ComplexTimeTable timeTable;
+			timeTable.Set(&t);
 
-};
+			return timeTable;
+		}
+
+	private:
+
+	};
+}

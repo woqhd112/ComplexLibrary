@@ -2,68 +2,61 @@
 
 #include "ComplexNode.h"
 
-template <typename T>
-class ComplexIterator
+namespace ComplexLibrary
 {
-public:
-
-	ComplexIterator(ComplexNode<T>* p = nullptr)
-		: m_cur(p)
+	template <typename T>
+	class ComplexIterator
 	{
+	public:
 
-	}
+		ComplexIterator(ComplexNode<T>* p = nullptr)
+			: m_cur(p)
+		{
 
-	~ComplexIterator()
-	{
+		}
 
-	}
+		~ComplexIterator()
+		{
 
-	ComplexIterator& operator ++ ()
-	{
-		m_cur = m_cur->m_next;
-		return *this;
-	}
+		}
 
-	ComplexIterator operator ++ (int)
-	{
-		ComplexIterator tmp = *this;
-		++*this;
-		return tmp;
-	}
+		ComplexIterator& operator ++ ()
+		{
+			m_cur = m_cur->m_next;
+			return *this;
+		}
 
-	ComplexNode<T>& operator * ()
-	{
-		return *m_cur;
-	}
+		ComplexIterator operator ++ (int)
+		{
+			ComplexIterator tmp = *this;
+			++*this;
+			return tmp;
+		}
 
-	ComplexNode<T>* operator -> ()
-	{
-		return m_cur;
-	}
+		ComplexNode<T>& operator * ()
+		{
+			return *m_cur;
+		}
 
-	/*T& operator * ()
-	{
-		return m_cur->value;
-	}
+		ComplexNode<T>* operator -> ()
+		{
+			return m_cur;
+		}
 
-	T* operator -> ()
-	{
-		return &m_cur->value;
-	}*/
+		bool operator == (const ComplexIterator& eq)
+		{
+			return m_cur == eq.m_cur;
+		}
 
-	bool operator == (const ComplexIterator& eq)
-	{
-		return m_cur == eq.m_cur;
-	}
+		bool operator != (const ComplexIterator& eq)
+		{
+			return m_cur != eq.m_cur;
+		}
 
-	bool operator != (const ComplexIterator& eq)
-	{
-		return m_cur != eq.m_cur;
-	}
+	private:
 
-private:
+		ComplexNode<T>* m_cur;
 
-	ComplexNode<T>* m_cur;
-
-};
+	};
+}
 

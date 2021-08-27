@@ -17,9 +17,6 @@
     <Filter Include="Process\Singleton">
       <UniqueIdentifier>{e5ebea7a-6e90-4df3-bbd5-1d37de3c16fc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Process\File">
-      <UniqueIdentifier>{ad1b190a-7f00-4efb-9a22-9bc69efb4c64}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Process\XML">
       <UniqueIdentifier>{cd23787e-1a92-4b16-974a-47209993e523}</UniqueIdentifier>
     </Filter>
@@ -29,14 +26,20 @@
     <Filter Include="Utility">
       <UniqueIdentifier>{ff267067-3dfd-4c91-8d1e-119b8d0c3571}</UniqueIdentifier>
     </Filter>
-    <Filter Include="SQLite3">
-      <UniqueIdentifier>{ac006ed6-69e4-4327-b37a-3e06e266ce3f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Log">
       <UniqueIdentifier>{41112e5e-cc16-48d6-bac0-bb2fbbe0aff4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Process\Format">
       <UniqueIdentifier>{20120385-41c5-489f-b2e4-356f9c1f5d6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DBSQLite3">
+      <UniqueIdentifier>{ac006ed6-69e4-4327-b37a-3e06e266ce3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="main">
+      <UniqueIdentifier>{c55c6dcd-081c-44ed-86ec-c4c0b5e90ad9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Process\IO">
+      <UniqueIdentifier>{abdefa7a-1fc7-4b00-bc35-37d26101b174}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -76,9 +79,6 @@
     <ClInclude Include="ComplexVariant.h">
       <Filter>Variable</Filter>
     </ClInclude>
-    <ClInclude Include="ComplexFile.h">
-      <Filter>Process\File</Filter>
-    </ClInclude>
     <ClInclude Include="ComplexXMLParsor.h">
       <Filter>Process\XML</Filter>
     </ClInclude>
@@ -97,20 +97,17 @@
     <ClInclude Include="ComplexUtility.h">
       <Filter>Utility</Filter>
     </ClInclude>
-    <ClInclude Include="ComplexCalculate.h">
-      <Filter>Utility</Filter>
-    </ClInclude>
     <ClInclude Include="ComplexTime.h">
       <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="ComplexDatabase.h">
-      <Filter>SQLite3</Filter>
+      <Filter>DBSQLite3</Filter>
     </ClInclude>
     <ClInclude Include="sqlite3.h">
-      <Filter>SQLite3</Filter>
+      <Filter>DBSQLite3</Filter>
     </ClInclude>
     <ClInclude Include="sqlite3ext.h">
-      <Filter>SQLite3</Filter>
+      <Filter>DBSQLite3</Filter>
     </ClInclude>
     <ClInclude Include="ComplexLog.h">
       <Filter>Log</Filter>
@@ -119,7 +116,7 @@
       <Filter>Container</Filter>
     </ClInclude>
     <ClInclude Include="ComplexConnectionPool.h">
-      <Filter>SQLite3</Filter>
+      <Filter>DBSQLite3</Filter>
     </ClInclude>
     <ClInclude Include="ComplexCondition.h">
       <Filter>Process\Thread</Filter>
@@ -133,6 +130,42 @@
     <ClInclude Include="ComplexRandom.h">
       <Filter>Utility</Filter>
     </ClInclude>
+    <ClInclude Include="ComplexSet.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexStringTokenizer.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexPrint.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexLibrary.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexSystem.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexCollection.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexScanner.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexConvert.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexIn.h">
+      <Filter>Process\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexOut.h">
+      <Filter>Process\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexFile.h">
+      <Filter>Process\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexArrayList.h">
+      <Filter>Container</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ComplexLibrary.cpp">
@@ -142,12 +175,12 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="sqlite3.c">
-      <Filter>SQLite3</Filter>
+      <Filter>DBSQLite3</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="sqlite3.def">
-      <Filter>SQLite3</Filter>
+      <Filter>DBSQLite3</Filter>
     </None>
   </ItemGroup>
 </Project>

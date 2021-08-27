@@ -1,220 +1,273 @@
 #pragma once
 
+#include <initializer_list>
 #include "ComplexIterator.h"
 
-
-template <typename T>
-class ComplexLinkedList
+namespace ComplexLibrary
 {
-private:
-	ComplexNode<T>* m_head;
-	ComplexNode<T>* m_tail;
-	int m_size;
-
-public:
-
-	typedef ComplexIterator<T> iterator;
-
-	ComplexLinkedList() : m_head(nullptr), m_tail(nullptr), m_size(0) {}
-	~ComplexLinkedList() { clear(); }
-
-	void push_tail(T value)
+	template <typename T>
+	class ComplexLinkedList
 	{
-		ComplexNode<T>* node = new ComplexNode<T>;
-		m_size++;
+	private:
+		ComplexNode<T>* m_head;
+		ComplexNode<T>* m_tail;
+		int m_size;
 
-		node->value = value;
-		node->m_next = nullptr;
+	public:
 
-		if (m_head == nullptr)
+		typedef ComplexIterator<T> iterator;
+
+		ComplexLinkedList()
+			: m_head(nullptr), m_tail(nullptr), m_size(0) {}
+
+		ComplexLinkedList(ComplexLinkedList<T>& ptr)
+			: m_head(nullptr), m_tail(nullptr), m_size(0)
 		{
-			m_head = node;
-			m_tail = node;
-		}
-		else
-		{
-			m_tail->m_next = node;
-			m_tail = m_tail->m_next;
-		}
-	}
-
-	void push_head(T value)
-	{
-		ComplexNode<T>* node = new ComplexNode<T>;
-		m_size++;
-
-		if (m_head != nullptr)
-		{
-			node->m_next = m_head;
-		}
-		node->value = value;
-		m_head = node;
-	}
-
-	bool push(int index, T value)
-	{
-		if (m_size < index) return false;	// skip tail..
-		if (index < 0) return false;	// not treatment index
-
-		if (m_head == nullptr || m_size == index)
-		{
-			push_tail(value);
-			return true;
-		}
-
-		ComplexNode<T>* moveNode = m_head;
-		ComplexNode<T>* containNode = moveNode;
-		ComplexNode<T>* node = new ComplexNode<T>;
-
-		node->value = value;
-		node->m_next = nullptr;
-
-		int cnt = 0;
-		while (moveNode != nullptr)
-		{
-			if (cnt == index)
+			clear();
+			iterator iter = ptr.begin();
+			while (iter != ptr.end())
 			{
-				containNode = moveNode;
-				moveNode = node;
-				moveNode->m_next = containNode;
-				break;
+				push_tail(iter->value);
+				iter++;
 			}
-			moveNode = moveNode->m_next;
-			cnt++;
 		}
 
-		m_size++;
-
-		return true;
-	}
-
-	void clear()
-	{
-		ComplexNode<T>* deleteNode = m_head;
-
-		while (deleteNode != nullptr)
+		ComplexLinkedList(std::initializer_list<T> list)
+			: m_head(nullptr), m_tail(nullptr), m_size(0)
 		{
-			m_head = deleteNode->m_next;
-			delete deleteNode;
-			deleteNode = m_head;
-		}
-		m_head = nullptr;
-		m_tail = nullptr;
-		m_size = 0;
-	}
-
-	bool erase(int index)
-	{
-		if (m_size <= index) return false;	// index out of bound 
-		if (index < 0) return false;	// not treatment index
-
-		ComplexNode<T>* findNode = m_head;
-		ComplexNode<T>* nextNode = findNode;
-
-		int cnt = 0;
-		while (findNode != nullptr)
-		{
-			if (cnt == index)
+			clear();
+			auto iter = list.begin();
+			while (iter != list.end())
 			{
-				break;
+				push_tail(*iter);
+				iter++;
+			}
+		}
+
+		~ComplexLinkedList() { clear(); }
+
+		void push_tail(T value)
+		{
+			ComplexNode<T>* node = new ComplexNode<T>;
+			m_size++;
+
+			node->value = value;
+			node->m_next = nullptr;
+
+			if (m_head == nullptr)
+			{
+				m_head = node;
+				m_tail = node;
 			}
 			else
 			{
-				nextNode = findNode;
+				m_tail->m_next = node;
+				m_tail = m_tail->m_next;
+			}
+		}
+
+		void push_head(T value)
+		{
+			ComplexNode<T>* node = new ComplexNode<T>;
+			m_size++;
+
+			if (m_head != nullptr)
+			{
+				node->m_next = m_head;
+			}
+			node->value = value;
+			m_head = node;
+		}
+
+		bool push(int index, T value)
+		{
+			if (m_size < index) return false;	// skip tail..
+			if (index < 0) return false;	// not treatment index
+
+			if (m_head == nullptr || m_size == index)
+			{
+				push_tail(value);
+				return true;
+			}
+
+			ComplexNode<T>* moveNode = m_head;
+			ComplexNode<T>* containNode = moveNode;
+			ComplexNode<T>* node = new ComplexNode<T>;
+
+			node->value = value;
+			node->m_next = nullptr;
+
+			int cnt = 0;
+			while (moveNode != nullptr)
+			{
+				if (cnt == index)
+				{
+					containNode = moveNode;
+					moveNode = node;
+					moveNode->m_next = containNode;
+					break;
+				}
+				moveNode = moveNode->m_next;
+				cnt++;
+			}
+
+			m_size++;
+
+			return true;
+		}
+
+		void clear()
+		{
+			ComplexNode<T>* deleteNode = m_head;
+
+			while (deleteNode != nullptr)
+			{
+				m_head = deleteNode->m_next;
+				delete deleteNode;
+				deleteNode = m_head;
+			}
+			m_head = nullptr;
+			m_tail = nullptr;
+			m_size = 0;
+		}
+
+		bool erase(int index)
+		{
+			if (m_size <= index) return false;	// index out of bound 
+			if (index < 0) return false;	// not treatment index
+
+			ComplexNode<T>* findNode = m_head;
+			ComplexNode<T>* nextNode = findNode;
+
+			int cnt = 0;
+			while (findNode != nullptr)
+			{
+				if (cnt == index)
+				{
+					break;
+				}
+				else
+				{
+					nextNode = findNode;
+					findNode = findNode->m_next;
+				}
+
+				cnt++;
+			}
+
+			if (findNode == nullptr)
+			{
+				return false;
+			}
+			else
+			{
+				m_size--;
+				nextNode->m_next = findNode->m_next;
+				delete findNode;
+			}
+
+
+			return true;
+		}
+
+		ComplexNode<T>* get_at(int index)
+		{
+			ComplexNode<T>* findNode = m_head;
+
+			int cnt = 0;
+			while (findNode != nullptr)
+			{
+				if (cnt == index)
+				{
+					break;
+				}
 				findNode = findNode->m_next;
+				cnt++;
 			}
 
-			cnt++;
+			return findNode;
 		}
 
-		if (findNode == nullptr)
+		ComplexNode<T>* get_head()
 		{
-			return false;
-		}
-		else
-		{
-			m_size--;
-			nextNode->m_next = findNode->m_next;
-			delete findNode;
+			return m_head;
 		}
 
-
-		return true;
-	}
-
-	ComplexNode<T>* get_at(int index)
-	{
-		ComplexNode<T>* findNode = m_head;
-
-		int cnt = 0;
-		while (findNode != nullptr)
+		ComplexNode<T>* get_tail()
 		{
-			if (cnt == index)
+			return m_tail;
+		}
+
+		T& at(int index)
+		{
+			ComplexNode<T>* findNode = m_head;
+
+			int cnt = 0;
+			while (findNode != nullptr)
 			{
-				break;
+				if (cnt == index)
+				{
+					break;
+				}
+				findNode = findNode->m_next;
+				cnt++;
 			}
-			findNode = findNode->m_next;
-			cnt++;
+
+			return findNode->value;
 		}
 
-		return findNode;
-	}
-
-	ComplexNode<T>* get_head()
-	{
-		return m_head;
-	}
-
-	ComplexNode<T>* get_tail()
-	{
-		return m_tail;
-	}
-
-	T& at(int index)
-	{
-		ComplexNode<T>* findNode = m_head;
-
-		int cnt = 0;
-		while (findNode != nullptr)
+		iterator begin()
 		{
-			if (cnt == index)
-			{
-				break;
-			}
-			findNode = findNode->m_next;
-			cnt++;
+			return iterator(m_head);
 		}
 
-		return findNode->value;
-	}
+		iterator end()
+		{
+			return iterator(nullptr);
+		}
 
-	iterator begin()
-	{
-		return iterator(m_head);
-	}
+		T& head()
+		{
+			return m_head->value;
+		}
 
-	iterator end()
-	{
-		return iterator(nullptr);
-	}
+		T& tail()
+		{
+			return m_tail->value;
+		}
 
-	T& head()
-	{
-		return m_head->value;
-	}
+		bool empty()
+		{
+			return (m_size <= 0);
+		}
 
-	T& tail()
-	{
-		return m_tail->value;
-	}
+		int size()
+		{
+			return m_size;
+		}
 
-	bool empty()
-	{
-		return (m_size <= 0);
-	}
+		ComplexLinkedList<T>& operator = (ComplexLinkedList<T>& other)
+		{
+			clear();
+			iterator iter = other.begin();
+			while (iter != other.end())
+			{
+				push_tail(iter->value);
+				iter++;
+			}
+			return *this;
+		}
 
-	int size()
-	{
-		return m_size;
-	}
-};
+		ComplexLinkedList<T>& operator = (std::initializer_list<T> list)
+		{
+			clear();
+			auto iter = list.begin();
+			while (iter != list.end())
+			{
+				push_tail(*iter);
+				iter++;
+			}
+			return *this;
+		}
+	};
+}

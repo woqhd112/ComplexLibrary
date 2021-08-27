@@ -4,113 +4,116 @@
 #include <thread>
 #include <chrono>
 
-class ComplexLock
+namespace ComplexLibrary
 {
-	friend class ComplexCondition;
-public:
-
-	ComplexLock(ComplexLock* lock = nullptr)
+	class ComplexLock
 	{
-		AttachCriticalSection(lock);
-	}
+		friend class ComplexCondition;
+	public:
 
-	virtual ~ComplexLock()
-	{
-		DetachCriticalSection();
-	}
-
-	void AttachCriticalSection(ComplexLock* lock = nullptr)
-	{
-		if (lock == nullptr)
-			m_uniquelock = std::unique_lock<std::mutex>(m_mutex, std::defer_lock);
-		else
-			m_uniquelock = std::unique_lock<std::mutex>(lock->m_mutex, std::defer_lock);
-	}
-
-	void DetachCriticalSection()
-	{
-		m_uniquelock.release();
-	}
-
-	void Lock()
-	{
-		try
+		ComplexLock(ComplexLock* lock = nullptr)
 		{
-			m_uniquelock.lock();
+			AttachCriticalSection(lock);
 		}
-		catch (std::system_error e)
+
+		virtual ~ComplexLock()
 		{
-			// 데드락인데 lock이 점유 성공할 때 까지 blocking 시킴
-			Lock();
+			DetachCriticalSection();
 		}
-	}
 
-	void UnLock()
-	{
-		try
+		void AttachCriticalSection(ComplexLock* lock = nullptr)
 		{
-			m_uniquelock.unlock();
+			if (lock == nullptr)
+				m_uniquelock = std::unique_lock<std::mutex>(m_mutex, std::defer_lock);
+			else
+				m_uniquelock = std::unique_lock<std::mutex>(lock->m_mutex, std::defer_lock);
 		}
-		catch (std::system_error e)
+
+		void DetachCriticalSection()
 		{
-			// 이미 unlock 상태이거나 lock이 초기화안된 상태 그냥 리턴시킴
-			return;
+			m_uniquelock.release();
 		}
-	}
 
-	bool TryLock()
-	{
-		bool btry = false;
-		try
+		void Lock()
 		{
-			btry = m_uniquelock.try_lock();
+			try
+			{
+				m_uniquelock.lock();
+			}
+			catch (std::system_error e)
+			{
+				// 데드락인데 lock이 점유 성공할 때 까지 blocking 시킴
+				Lock();
+			}
 		}
-		catch (std::system_error e)
+
+		void UnLock()
 		{
-			// 데드락 발생
-			btry = false;
+			try
+			{
+				m_uniquelock.unlock();
+			}
+			catch (std::system_error e)
+			{
+				// 이미 unlock 상태이거나 lock이 초기화안된 상태 그냥 리턴시킴
+				return;
+			}
 		}
-		return btry;
-	}
 
-private:
+		bool TryLock()
+		{
+			bool btry = false;
+			try
+			{
+				btry = m_uniquelock.try_lock();
+			}
+			catch (std::system_error e)
+			{
+				// 데드락 발생
+				btry = false;
+			}
+			return btry;
+		}
 
-	std::mutex m_mutex;
-	std::unique_lock<std::mutex> m_uniquelock;
-};
+	private:
 
-class ComplexScopedLock
-{
-	friend class ComplexCondition;
-public:
+		std::mutex m_mutex;
+		std::unique_lock<std::mutex> m_uniquelock;
+	};
 
-	explicit ComplexScopedLock(ComplexLock* lock)
+	class ComplexScopedLock
 	{
-		m_lock.AttachCriticalSection(lock);
-		m_lock.Lock();
-	}
+		friend class ComplexCondition;
+	public:
 
-	virtual ~ComplexScopedLock()
-	{
-		m_lock.UnLock();
-	}
+		explicit ComplexScopedLock(ComplexLock* lock)
+		{
+			m_lock.AttachCriticalSection(lock);
+			m_lock.Lock();
+		}
 
-	void Lock()
-	{
-		m_lock.Lock();
-	}
+		virtual ~ComplexScopedLock()
+		{
+			m_lock.UnLock();
+		}
 
-	void UnLock()
-	{
-		m_lock.UnLock();
-	}
+		void Lock()
+		{
+			m_lock.Lock();
+		}
 
-	ComplexLock& GetLock()
-	{
-		return m_lock;
-	}
+		void UnLock()
+		{
+			m_lock.UnLock();
+		}
 
-private:
+		ComplexLock& GetLock()
+		{
+			return m_lock;
+		}
 
-	ComplexLock m_lock;
-};
+	private:
+
+		ComplexLock m_lock;
+	};
+}

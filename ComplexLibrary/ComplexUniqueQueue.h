@@ -3,80 +3,82 @@
 #include "ComplexQueue.h"
 #include "ComplexLock.h"
 
-
-template <typename T>
-class ComplexUniqueQueue
+namespace ComplexLibrary
 {
-public:
-
-	ComplexUniqueQueue()
+	template <typename T>
+	class ComplexUniqueQueue
 	{
+	public:
 
-	}
+		ComplexUniqueQueue()
+		{
 
-	virtual ~ComplexUniqueQueue()
-	{
+		}
 
-	}
+		virtual ~ComplexUniqueQueue()
+		{
 
-	void push(T value)
-	{
-		m_queue.push(value);
-	}
+		}
 
-	T& front() const
-	{
-		return m_queue.front();
-	}
+		void push(T value)
+		{
+			m_queue.push(value);
+		}
 
-	T& back() const
-	{
-		return m_queue.back();
-	}
+		T& front() const
+		{
+			return m_queue.front();
+		}
 
-	void pop()
-	{
-		m_queue.pop();
-	}
+		T& back() const
+		{
+			return m_queue.back();
+		}
 
-	int size()
-	{
-		return m_queue.size();
-	}
+		void pop()
+		{
+			m_queue.pop();
+		}
 
-	bool empty()
-	{
-		return m_queue.empty();
-	}
+		int size()
+		{
+			return m_queue.size();
+		}
 
-	void clear()
-	{
-		m_queue.clear();
-	}
+		bool empty()
+		{
+			return m_queue.empty();
+		}
 
-	void lock()
-	{
-		m_lock.Lock();
-	}
+		void clear()
+		{
+			m_queue.clear();
+		}
 
-	void unlock()
-	{
-		m_lock.UnLock();
-	}
+		void lock()
+		{
+			m_lock.Lock();
+		}
 
-	bool trylock()
-	{
-		return m_lock.TryLock();
-	}
+		void unlock()
+		{
+			m_lock.UnLock();
+		}
 
-	ComplexLock* getlock()
-	{
-		return &m_lock;
-	}
+		bool trylock()
+		{
+			return m_lock.TryLock();
+		}
 
-private:
+		ComplexLock* getlock()
+		{
+			return &m_lock;
+		}
 
-	ComplexQueue<T> m_queue;
-	ComplexLock m_lock;
+	private:
 
-};
+		ComplexQueue<T> m_queue;
+		ComplexLock m_lock;
+
+	};
+}

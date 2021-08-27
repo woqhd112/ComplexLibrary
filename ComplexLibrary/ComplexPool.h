@@ -1,242 +1,245 @@
 #pragma once
 
 #include "ComplexVector.h"
-#include "ComplexUtility.h"
+#include "ComplexConvert.h"
 
-template <typename T>
-class ComplexPoolData
+namespace ComplexLibrary
 {
-public:
-
-	ComplexPoolData()
-		: m_isConnect(false)
+	template <typename T>
+	class ComplexPoolData
 	{
-		m_ptr = new T;
-	}
+	public:
 
-	virtual ~ComplexPoolData()
-	{
-		delete m_ptr;
-		m_ptr = nullptr;
-	}
+		ComplexPoolData()
+			: m_isConnect(false)
+		{
+			m_ptr = new T;
+		}
 
-	bool IsConnect() const
-	{
-		return m_isConnect;
-	}
+		virtual ~ComplexPoolData()
+		{
+			delete m_ptr;
+			m_ptr = nullptr;
+		}
 
-	void SetConnect(bool con)
-	{
-		m_isConnect = con;
-	}
+		bool IsConnect() const
+		{
+			return m_isConnect;
+		}
 
-	T* GetInstance() const
-	{
-		return m_ptr;
-	}
+		void SetConnect(bool con)
+		{
+			m_isConnect = con;
+		}
 
-private:
+		T* GetInstance() const
+		{
+			return m_ptr;
+		}
 
-	T* m_ptr;
-	bool m_isConnect;
+	private:
 
-};
+		T* m_ptr;
+		bool m_isConnect;
+
+	};
 
 #define MAX_POOL_CAPACITY			999
 #define MAX_POOL_CAPACITY_FORMAT	"%03d"
 #define MAX_POOL_CAPACITY_LENGTH	6
 
-template <typename T>
-class ComplexPool
-{
-	typedef ComplexVector<ComplexPoolData<T>*> PoolDataFactory;
-public:
-
-	ComplexPool(int poolCapacity = 10)
-		: m_poolCapacity(poolCapacity)
-		, m_useConnectionCount(0)
+	template <typename T>
+	class ComplexPool
 	{
-		if (poolCapacity > MAX_POOL_CAPACITY)
-			throw "Max Pool Capacity";
-		else if (poolCapacity < 1)
-			throw "At least 1 capacity";
+		typedef ComplexVector<ComplexPoolData<T>*> PoolDataFactory;
+	public:
 
-		for (int i = 1; i <= poolCapacity; i++)
+		ComplexPool(int poolCapacity = 10)
+			: m_poolCapacity(poolCapacity)
+			, m_useConnectionCount(0)
 		{
-			ComplexPoolData<T>* newPoolData = new ComplexPoolData<T>;
-			m_pool.push_back(newPoolData);
-		}
-	}
+			if (poolCapacity > MAX_POOL_CAPACITY)
+				throw "Max Pool Capacity";
+			else if (poolCapacity < 1)
+				throw "At least 1 capacity";
 
-	virtual ~ComplexPool()
-	{
-		for (int i = 0; i < m_pool.size(); i++)
-		{
-			ComplexPoolData<T>* poolData = m_pool.at(i);
-			delete poolData;
-			poolData = nullptr;
-		}
-		m_pool.clear();
-	}
-
-protected:
-
-	void SetCapacity(int capacity)
-	{
-		m_poolCapacity = capacity;
-	}
-
-	int GetCapacity() const
-	{
-		return m_poolCapacity;
-	}
-
-	ComplexString ConnectPool()
-	{
-		int i = 0;
-		ComplexPoolData<T>* poolData = nullptr;
-		for (i = 0; i < m_pool.size(); i++)
-		{
-			poolData = m_pool.at(i);
-			if (poolData->IsConnect() == false)
-			{
-				poolData->SetConnect(true);
-				m_useConnectionCount++;
-				break;
-			}
-		}
-
-		if (poolData == nullptr)
-			return "";
-
-		return EncodePoolID(i);
-	}
-
-	bool DisConnectPool(ComplexString poolID)
-	{
-		int poolIdx = DecodePoolID(poolID);
-
-		if (poolIdx == -1)
-			return false;
-
-		if (poolIdx > (m_pool.size() - 1))
-			return false;
-
-		ComplexPoolData<T>* poolData = m_pool.at(poolIdx);
-		poolData->SetConnect(false);
-		m_useConnectionCount--;
-
-		return true;
-	}
-
-	T* GetInstance(ComplexString poolID)
-	{
-		ComplexPoolData<T>* poolData = GetPoolData(poolID);
-
-		if (poolData == nullptr)
-			return nullptr;
-
-		T* t = poolData->GetInstance();
-
-		return t;
-	}
-
-	ComplexPoolData<T>* GetPoolData(ComplexString poolID)
-	{
-		int poolIdx = DecodePoolID(poolID);
-		if (poolIdx == -1)
-			return nullptr;
-
-		if (poolIdx > (m_pool.size() - 1))
-			return nullptr;
-
-		ComplexPoolData<T>* poolData = m_pool.at(poolIdx);
-
-		return poolData;
-	}
-
-	void ReservePoolSize(int modifySize)
-	{
-		if (modifySize > MAX_POOL_CAPACITY)
-			throw "Max Pool Capacity";
-		else if (modifySize < 1)
-			throw "At least 1 capacity";
-
-		int size_error = m_poolCapacity - modifySize;
-
-		// 사이즈를 줄일 때
-		if (size_error > 0)
-		{
-			for (int i = 0; i < size_error; i++)
-			{
-				m_pool.pop_back();
-			}
-		}
-		// 사이즈를 늘릴 때
-		else if (size_error < 0)
-		{
-			size_error = abs(size_error);
-			for (int i = 0; i < size_error; i++)
+			for (int i = 1; i <= poolCapacity; i++)
 			{
 				ComplexPoolData<T>* newPoolData = new ComplexPoolData<T>;
 				m_pool.push_back(newPoolData);
 			}
 		}
 
-	}
+		virtual ~ComplexPool()
+		{
+			for (int i = 0; i < m_pool.size(); i++)
+			{
+				ComplexPoolData<T>* poolData = m_pool.at(i);
+				delete poolData;
+				poolData = nullptr;
+			}
+			m_pool.clear();
+		}
 
-	int GetPoolSize() const
-	{
-		return m_poolCapacity;
-	}
+	protected:
 
-	int GetUseConnectionCount() const
-	{
-		return m_useConnectionCount;
-	}
+		void SetCapacity(int capacity)
+		{
+			m_poolCapacity = capacity;
+		}
 
-	PoolDataFactory* GetPoolDataFactory()
-	{
-		return &m_pool;
-	}
+		int GetCapacity() const
+		{
+			return m_poolCapacity;
+		}
 
-private:
+		ComplexString ConnectPool()
+		{
+			int i = 0;
+			ComplexPoolData<T>* poolData = nullptr;
+			for (i = 0; i < m_pool.size(); i++)
+			{
+				poolData = m_pool.at(i);
+				if (poolData->IsConnect() == false)
+				{
+					poolData->SetConnect(true);
+					m_useConnectionCount++;
+					break;
+				}
+			}
 
-	// pid 는 PIDxxx 형태로 저장
-	ComplexString EncodePoolID(int id)
-	{
-		if (id > MAX_POOL_CAPACITY)
-			return "";
-		ComplexString text = "PID";
-		text.AppendFormat(MAX_POOL_CAPACITY_FORMAT, id);
-		return text;
-	}
+			if (poolData == nullptr)
+				return "";
 
-	int DecodePoolID(ComplexString id)
-	{
-		if (id == "")
-			return -1;
+			return EncodePoolID(i);
+		}
 
-		if (id.GetLength() < MAX_POOL_CAPACITY_LENGTH)
-			return -1;
+		bool DisConnectPool(ComplexString poolID)
+		{
+			int poolIdx = DecodePoolID(poolID);
 
-		int findIdx = id.Find("PID");
+			if (poolIdx == -1)
+				return false;
 
-		if (findIdx == -1)
-			return -1;
+			if (poolIdx > (m_pool.size() - 1))
+				return false;
 
-		ComplexString id_num = id.GetText(3, id.GetLength());
+			ComplexPoolData<T>* poolData = m_pool.at(poolIdx);
+			poolData->SetConnect(false);
+			m_useConnectionCount--;
 
-		int returnID = -1;
-		if (id_num != "")
-			returnID = ComplexUtility::StringToInt(id_num);
+			return true;
+		}
 
-		return returnID;
-	}
+		T* GetInstance(ComplexString poolID)
+		{
+			ComplexPoolData<T>* poolData = GetPoolData(poolID);
 
-private:
+			if (poolData == nullptr)
+				return nullptr;
 
-	PoolDataFactory m_pool;
-	int m_poolCapacity;
-	int m_useConnectionCount;
-};
+			T* t = poolData->GetInstance();
+
+			return t;
+		}
+
+		ComplexPoolData<T>* GetPoolData(ComplexString poolID)
+		{
+			int poolIdx = DecodePoolID(poolID);
+			if (poolIdx == -1)
+				return nullptr;
+
+			if (poolIdx > (m_pool.size() - 1))
+				return nullptr;
+
+			ComplexPoolData<T>* poolData = m_pool.at(poolIdx);
+
+			return poolData;
+		}
+
+		void ReservePoolSize(int modifySize)
+		{
+			if (modifySize > MAX_POOL_CAPACITY)
+				throw "Max Pool Capacity";
+			else if (modifySize < 1)
+				throw "At least 1 capacity";
+
+			int size_error = m_poolCapacity - modifySize;
+
+			// 사이즈를 줄일 때
+			if (size_error > 0)
+			{
+				for (int i = 0; i < size_error; i++)
+				{
+					m_pool.pop_back();
+				}
+			}
+			// 사이즈를 늘릴 때
+			else if (size_error < 0)
+			{
+				size_error = abs(size_error);
+				for (int i = 0; i < size_error; i++)
+				{
+					ComplexPoolData<T>* newPoolData = new ComplexPoolData<T>;
+					m_pool.push_back(newPoolData);
+				}
+			}
+
+		}
+
+		int GetPoolSize() const
+		{
+			return m_poolCapacity;
+		}
+
+		int GetUseConnectionCount() const
+		{
+			return m_useConnectionCount;
+		}
+
+		PoolDataFactory* GetPoolDataFactory()
+		{
+			return &m_pool;
+		}
+
+	private:
+
+		// pid 는 PIDxxx 형태로 저장
+		ComplexString EncodePoolID(int id)
+		{
+			if (id > MAX_POOL_CAPACITY)
+				return "";
+			ComplexString text = "PID";
+			text.AppendFormat(MAX_POOL_CAPACITY_FORMAT, id);
+			return text;
+		}
+
+		int DecodePoolID(ComplexString id)
+		{
+			if (id == "")
+				return -1;
+
+			if (id.GetLength() < MAX_POOL_CAPACITY_LENGTH)
+				return -1;
+
+			int findIdx = id.Find("PID");
+
+			if (findIdx == -1)
+				return -1;
+
+			ComplexString id_num = id.GetText(3, id.GetLength());
+
+			int returnID = -1;
+			if (id_num != "")
+				returnID = ComplexConvert::StringToInt(id_num);
+
+			return returnID;
+		}
+
+	private:
+
+		PoolDataFactory m_pool;
+		int m_poolCapacity;
+		int m_useConnectionCount;
+	};
+}

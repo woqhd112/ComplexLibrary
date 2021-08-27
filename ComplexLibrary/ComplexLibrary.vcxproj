@@ -158,22 +158,33 @@ copy $(ProjectDir)*.h $(SolutionDir)lib\header\.</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ComplexArrayList.h" />
+    <ClInclude Include="ComplexCollection.h" />
     <ClInclude Include="ComplexCondition.h" />
     <ClInclude Include="ComplexConnectionPool.h" />
     <ClInclude Include="ComplexDatabase.h" />
     <ClInclude Include="ComplexFormat.h" />
+    <ClInclude Include="ComplexIn.h" />
     <ClInclude Include="ComplexIterator.h" />
+    <ClInclude Include="ComplexLibrary.h" />
     <ClInclude Include="ComplexLinkedList.h" />
     <ClInclude Include="ComplexLock.h" />
     <ClInclude Include="ComplexLog.h" />
     <ClInclude Include="ComplexMap.h" />
     <ClInclude Include="ComplexNode.h" />
+    <ClInclude Include="ComplexConvert.h" />
+    <ClInclude Include="ComplexOut.h" />
     <ClInclude Include="ComplexPool.h" />
+    <ClInclude Include="ComplexPrint.h" />
     <ClInclude Include="ComplexQueue.h" />
     <ClInclude Include="ComplexRandom.h" />
+    <ClInclude Include="ComplexScanner.h" />
+    <ClInclude Include="ComplexSet.h" />
     <ClInclude Include="ComplexSingleton.h" />
     <ClInclude Include="ComplexStack.h" />
     <ClInclude Include="ComplexString.h" />
+    <ClInclude Include="ComplexStringTokenizer.h" />
+    <ClInclude Include="ComplexSystem.h" />
     <ClInclude Include="ComplexThread.h" />
     <ClInclude Include="ComplexTime.h" />
     <ClInclude Include="ComplexUniqueQueue.h" />
@@ -183,7 +194,6 @@ copy $(ProjectDir)*.h $(SolutionDir)lib\header\.</Command>
     <ClInclude Include="ComplexXMLHandler.h" />
     <ClInclude Include="ComplexXMLNode.h" />
     <ClInclude Include="ComplexXMLParsor.h" />
-    <ClInclude Include="ComplexCalculate.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="ComplexFile.h" />
     <ClInclude Include="pch.h" />

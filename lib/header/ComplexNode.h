@@ -1,42 +1,82 @@
 #pragma once
 
-template <typename T>
-class ComplexNode
+namespace ComplexLibrary
 {
-	template <typename T> friend class ComplexLinkedList;
-	template <typename T> friend class ComplexIterator;
-	template <typename T> friend class ComplexQueue;
-	template <typename T> friend class ComplexStack;
+	template <typename T> class ComplexNodeSet;
 
-public:
-
-	T value;
-	ComplexNode() {}
-	~ComplexNode() {}
-	ComplexNode(const T& value, ComplexNode<T>* ptr)
+	template <typename T>
+	class ComplexNode
 	{
-		this->value = value;
-		this->m_next = ptr;
-	}
+		template <typename T> friend class ComplexLinkedList;
+		template <typename T> friend class ComplexIterator;
+		template <typename T> friend class ComplexQueue;
+		template <typename T> friend class ComplexStack;
+		template <typename T> friend class ComplexNodeSet;
+		template <typename T> friend class ComplexSet;
 
-	bool has_next()
+	public:
+
+		T value;
+		ComplexNode() {}
+		~ComplexNode() {}
+		ComplexNode(const T& value, ComplexNode<T>* ptr)
+		{
+			this->value = value;
+			this->m_next = ptr;
+		}
+
+		bool has_next()
+		{
+			return (m_next != nullptr);
+		}
+
+		ComplexNode<T>* next()
+		{
+			return this->m_next;
+		}
+
+	private:
+
+		ComplexNode<T>* m_next = nullptr;
+
+	};
+
+
+	template <typename T>
+	class ComplexNodeSet
 	{
-		return (m_next != nullptr);
-	}
+		template <typename T> friend class ComplexSet;
 
-	ComplexNode<T>* next()
-	{
-		return this->m_next;
-	}
+	public:
 
-private:
+		T value;
+		ComplexNodeSet() : m_castingPtr(new ComplexNode<T>) { }
+		~ComplexNodeSet() { delete m_castingPtr; }
+		ComplexNodeSet(const T& value, ComplexNodeSet<T>* little_ptr, ComplexNodeSet<T>* too_ptr)
+			: m_castingPtr(new ComplexNode<T>)
+		{
+			this->value = value;
+			this->m_little = little_ptr;
+			this->m_too = too_ptr;
+		}
 
-	ComplexNode<T>* m_next = nullptr;
 
-	/*ComplexNode<T>& operator = (const ComplexNode<T>* ptr)
-	{
-		this->value = ptr->value;
-		this->next = ptr->next;
-		return *this;
-	}*/
-};
+		bool operator < (ComplexNodeSet<T>& compare)
+		{
+			return (value < compare.value);
+		}
+
+	private:
+
+		ComplexNodeSet<T>* m_parent = nullptr;
+		ComplexNodeSet<T>* m_little = nullptr;
+		ComplexNodeSet<T>* m_too = nullptr;
+		ComplexNode<T>* m_castingPtr = nullptr;
+
+		void SetValue(T value)
+		{
+			this->value = value;
+			m_castingPtr->value = value;
+		}
+	};
+}
