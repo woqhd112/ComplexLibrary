@@ -18,18 +18,12 @@ namespace ComplexLibrary
 
 		}
 
-		~ComplexXMLNode()
+		virtual ~ComplexXMLNode()
 		{
 			if (next_element)
 			{
 				delete next_element;
 				next_element = nullptr;
-			}
-
-			if (parent_element)
-			{
-				delete parent_element;
-				parent_element = nullptr;
 			}
 
 			if (child_element)

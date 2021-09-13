@@ -1,5 +1,6 @@
 #pragma once
 
+#include <initializer_list>
 #include "ComplexNode.h"
 
 namespace ComplexLibrary
@@ -141,7 +142,7 @@ namespace ComplexLibrary
 			return *this;
 		}
 
-		ComplexQueue<T>& operator = (std::initializer_list<T> list)
+		ComplexQueue<T>& operator = (std::initializer_list<T>& list)
 		{
 			clear();
 			auto iter = list.begin();
@@ -150,6 +151,7 @@ namespace ComplexLibrary
 				push(*iter);
 				iter++;
 			}
+
 			return *this;
 		}
 

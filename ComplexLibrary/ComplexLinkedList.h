@@ -258,7 +258,7 @@ namespace ComplexLibrary
 			return *this;
 		}
 
-		ComplexLinkedList<T>& operator = (std::initializer_list<T> list)
+		ComplexLinkedList<T>& operator = (std::initializer_list<T>& list)
 		{
 			clear();
 			auto iter = list.begin();
@@ -269,5 +269,6 @@ namespace ComplexLibrary
 			}
 			return *this;
 		}
+
 	};
 }

@@ -299,6 +299,15 @@ namespace ComplexLibrary
 
 		void AppendElement(ComplexXMLNode* elem, ComplexString& appendDoc, ComplexString& depthTab)
 		{
+			if (elem->IsAnnotation())
+			{
+				appendDoc += depthTab;
+				appendDoc += "<!--";
+				appendDoc += elem->GetElementValue();
+				appendDoc += "-->";
+				return;
+			}
+
 			appendDoc += depthTab;	// append depth tab
 			appendDoc += "<";	// open tag
 			appendDoc += elem->GetElementName();	// append elem name
@@ -407,13 +416,33 @@ namespace ComplexLibrary
 			return true;
 		}
 
-		void VaildateAnnotation(ComplexString& doc)
+		bool VaildateAnnotation(ComplexXMLNode* currentElem, ComplexString& doc)
 		{
-			// 함수 호출위치 설정 및 구현
-			int open_tag = doc.Find(ANNOTATION_OPEN_TAG);
-			int close_tag = doc.Find(ANNOTATION_CLOSE_TAG);
+			ComplexString copy = doc;
+			copy.Trim();
 
-			ComplexString annotation_text = ComplexConvert::GetText(open_tag + 3, close_tag + 2, m_doc);
+			// 함수 호출위치 설정 및 구현
+			int open_tag = copy.Find(ANNOTATION_OPEN_TAG);
+			int close_tag = copy.Find(ANNOTATION_CLOSE_TAG);
+
+			if (open_tag != 0)
+				return false;
+
+			if (open_tag == -1)
+				return false;
+
+			if (open_tag != -1 && close_tag == -1)
+				throw "Not Close Annotation Tag";
+
+			ComplexString annotation_text = ComplexConvert::GetText(open_tag + 4, close_tag - 1, copy);
+			currentElem->SetAnnotation(true);
+			currentElem->SetElementValue(annotation_text);
+
+			ComplexString pre = ComplexConvert::GetText(0, open_tag - 1, copy);
+			ComplexString suf = ComplexConvert::GetText(close_tag + 3, copy.GetLength(), copy);
+			doc = pre + suf;
+
+			return true;
 		}
 
 		bool ValidateTag(ComplexString& checkDoc)
@@ -442,6 +471,19 @@ namespace ComplexLibrary
 
 			if (ValidateTag(tag) == false)
 				return;
+
+			if (VaildateAnnotation(currentElem, tag))
+			{
+				tag.Trim();
+				if (tag != "")
+				{
+					currentElem->SetParentElement(parentElem);
+					ComplexXMLNode* nextElem = new ComplexXMLNode;
+					InputDoc(nextElem, parentElem, tag);
+					currentElem->SetNextElement(nextElem);
+				}
+				return;
+			}
 
 			bool bNotChild = false;
 			int close_tag = tag.Find(">");

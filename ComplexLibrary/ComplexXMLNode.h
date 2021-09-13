@@ -14,23 +14,29 @@ namespace ComplexLibrary
 			: next_element(nullptr)
 			, parent_element(nullptr)
 			, child_element(nullptr)
+			, bAnnotation(false)
 		{
 
 		}
 
 		virtual ~ComplexXMLNode()
 		{
-			if (next_element)
+			if (next_element != nullptr)
 			{
 				delete next_element;
 				next_element = nullptr;
 			}
 
-			if (child_element)
+			if (child_element != nullptr)
 			{
 				delete child_element;
 				child_element = nullptr;
 			}
+		}
+
+		bool IsAnnotation() const
+		{
+			return bAnnotation;
 		}
 
 		bool HasNextElement()
@@ -110,6 +116,11 @@ namespace ComplexLibrary
 			return findkey;
 		}
 
+		void SetAnnotation(bool annotation)
+		{
+			bAnnotation = annotation;
+		}
+
 		void SetElementName(ComplexString elemname)
 		{
 			element_name = elemname;
@@ -166,6 +177,7 @@ namespace ComplexLibrary
 		ComplexAttributes attributes;
 		ComplexString element_name;
 		ComplexString element_value;
+		bool bAnnotation;
 
 	};
 }

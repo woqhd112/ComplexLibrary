@@ -49,14 +49,14 @@ namespace ComplexLibrary
 			static unsigned long long seed = (unsigned long long)tm.GetCurrentTime();
 
 			// 첫번째 시드
-			ComplexTime::ComplexTimeTable table1 = tm.GetCurrentTime() - 2847172;
+			ComplexTimeTable table1 = tm.GetCurrentTime() - 2847172;
 			unsigned long long firstSeed = (unsigned long long)table1;
 
 			// 두번째 시드
 			unsigned long long secondSeed = (firstSeed % seed) * seed;
 
 			// 세번째 시드
-			ComplexTime::ComplexTimeTable table2 = tm.GetCurrentTime() - 5691928;
+			ComplexTimeTable table2 = tm.GetCurrentTime() - 5691928;
 			unsigned long long d = (unsigned long long)table2;
 			unsigned long long thirdSeed = (d - firstSeed) * d;
 

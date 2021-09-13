@@ -1,5 +1,6 @@
 #pragma once
 #include <initializer_list>
+#include "ComplexIterator.h"
 
 namespace ComplexLibrary
 {
@@ -8,7 +9,10 @@ namespace ComplexLibrary
 	{
 	public:
 
+		typedef ComplexIterator<T> iterator;
+
 		ComplexVector(int capacity = 4)
+			: m_head(nullptr)
 		{
 			m_ptr = new T[capacity];
 			m_capacity = capacity;
@@ -16,7 +20,8 @@ namespace ComplexLibrary
 		}
 
 		ComplexVector(ComplexVector<T>& ptr)
-			: m_ptr(nullptr)
+			: m_head(nullptr)
+			, m_ptr(nullptr)
 			, m_size(0)
 			, m_capacity(0)
 		{
@@ -39,7 +44,8 @@ namespace ComplexLibrary
 		}
 
 		ComplexVector(std::initializer_list<T> list)
-			: m_ptr(nullptr)
+			: m_head(nullptr)
+			, m_ptr(nullptr)
 			, m_size(0)
 			, m_capacity(0)
 		{
@@ -67,6 +73,19 @@ namespace ComplexLibrary
 		{
 			if (m_ptr != nullptr)
 				delete[] m_ptr;
+
+			if (m_head != nullptr)
+			{
+				ComplexNode<T>* cursor = m_head;
+				while (cursor->has_next())
+				{
+					ComplexNode<T>* next = cursor->next();
+					delete cursor;
+					cursor = next;
+				}
+				delete cursor;
+				m_head = nullptr;
+			}
 		}
 
 		void push_back(T value)
@@ -89,6 +108,22 @@ namespace ComplexLibrary
 			}
 
 			m_ptr[m_size] = value;
+
+			ComplexNode<T>* newNode = new ComplexNode<T>;
+			newNode->value = value;
+
+			if (m_head == nullptr)
+				m_head = newNode;
+			else
+			{
+				ComplexNode<T>* cursor = m_head;
+				while (cursor->has_next())
+				{
+					cursor = cursor->next();
+				}
+				cursor->m_next = newNode;
+			}
+
 			m_size++;
 		}
 
@@ -126,20 +161,41 @@ namespace ComplexLibrary
 			return m_ptr[m_size - 1];
 		}
 
-		T* begin() const
+		iterator begin()
 		{
-			return m_ptr;
+			return iterator(m_head);
 		}
 
-		T* end() const
+		iterator end() const
 		{
-			return m_ptr + m_size;
+			return iterator(nullptr);
+		}
+
+		void erase(iterator iter)
+		{
+			if (m_size <= 0) throw "Index Out of Bound";
+
+			bool bFind = false;
+			int i = 0;
+			for (i = 0; i < m_size; i++)
+			{
+				if (m_ptr[i] == iter->value)
+				{
+					bFind = true;
+					break;
+				}
+			}
+
+			if (bFind)
+				erase(i);
 		}
 
 		void erase(int idx)
 		{
 			if (m_size <= 0) throw "Index Out of Bound";
 			if ((m_size - 1) < idx) throw "Index Out of Bound";
+
+			delete_node(m_ptr[idx]);
 
 			T* tmp = new T[m_capacity];
 			int tmpidx = 0;
@@ -159,6 +215,7 @@ namespace ComplexLibrary
 			delete[] m_ptr;
 			m_ptr = tmp;
 			m_size--;
+
 		}
 
 		void erase(int startidx, int endidx)
@@ -273,10 +330,55 @@ namespace ComplexLibrary
 	private:
 
 		T* m_ptr;
+		ComplexNode<T>* m_head;
 		int m_size;
 		int m_capacity;
 
+		void delete_node(T& value)
+		{
+			ComplexNode<T>* prev = nullptr;
+			ComplexNode<T>* cursor = m_head;
 
+			while (cursor->has_next())
+			{
+				if (value == cursor->value)
+					break;
+				prev = cursor;
+				cursor = cursor->next();
+			}
+
+			// 커서가 맨 마지막까지 도달하였을 때
+			if (!cursor->has_next())
+			{
+				if (value == cursor->value)
+				{
+					// 노드 개수가 1개 초과일 때
+					if (prev != nullptr)
+					{
+						prev->m_next = cursor->m_next;
+					}
+					// 노드 개수가 1개일 때 (초반과 끝이 같을 때)
+					else
+					{
+						m_head = nullptr;
+					}
+				}
+			}
+			// 커서가 끝지점이 아닐 때
+			else
+			{
+				// 노드가 두번 째 이상일 때
+				if (prev != nullptr)
+				{
+					prev->m_next = cursor->m_next;
+				}
+				// 노드가 첫번 째일 떄
+				else
+				{
+					m_head = cursor->m_next;
+				}
+			}
+		}
 	};
 }
 

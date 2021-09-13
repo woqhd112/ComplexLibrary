@@ -158,11 +158,11 @@ copy $(ProjectDir)*.h $(SolutionDir)lib\header\.</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ComplexArrayList.h" />
     <ClInclude Include="ComplexCollection.h" />
     <ClInclude Include="ComplexCondition.h" />
     <ClInclude Include="ComplexConnectionPool.h" />
     <ClInclude Include="ComplexDatabase.h" />
+    <ClInclude Include="ComplexDeque.h" />
     <ClInclude Include="ComplexFormat.h" />
     <ClInclude Include="ComplexIn.h" />
     <ClInclude Include="ComplexIterator.h" />
@@ -214,6 +214,9 @@ copy $(ProjectDir)*.h $(SolutionDir)lib\header\.</Command>
       </PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdafx.h</PrecompiledHeaderFile>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">SQLITE3_EXPORTS;SQLITE_ENABLE_FTS3;SQLITE_ENABLE_RTREE;SQLITE_ENABLE_COLUMN_METADATA;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">SQLITE3_EXPORTS;SQLITE_ENABLE_FTS3;SQLITE_ENABLE_RTREE;SQLITE_ENABLE_COLUMN_METADATA;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</SDLCheck>
+      <OmitFramePointers Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</OmitFramePointers>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -33,7 +33,22 @@ namespace ComplexLibrary
 			iterator iter = ptr.begin();
 			while (iter != ptr.end())
 			{
-				insert(iter);
+				insert(iter->value);
+				iter++;
+			}
+		}
+
+		ComplexSet(ComplexSet<T>&& ptr)
+			: m_size(0)
+			, m_root(nullptr)
+			, m_sortValue(nullptr)
+			, m_pos(m_root)
+		{
+			clear();
+			iterator iter = ptr.begin();
+			while (iter != ptr.end())
+			{
+				insert(iter->value);
 				iter++;
 			}
 		}
@@ -318,7 +333,13 @@ namespace ComplexLibrary
 			m_size = other.m_size;
 			m_root = other.m_root;
 			m_sortValue = other.m_sortValue;
-			m_pos = other.m_pos;
+
+			iterator iter = other.begin();
+			while (iter != other.end())
+			{
+				insert(iter->value);
+				iter++;
+			}
 			return *this;
 		}
 

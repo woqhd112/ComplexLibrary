@@ -137,7 +137,8 @@ namespace ComplexLibrary
 			return *this;
 		}
 
-		ComplexStack<T>& operator = (std::initializer_list<T> list)
+
+		ComplexStack<T>& operator = (std::initializer_list<T>& list)
 		{
 			clear();
 			auto iter = list.begin();
@@ -146,6 +147,7 @@ namespace ComplexLibrary
 				push(*iter);
 				iter++;
 			}
+
 			return *this;
 		}
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <initializer_list>
+#include "ComplexSet.h"
 #include "ComplexVector.h"
 #include "ComplexLinkedList.h"
 
@@ -17,6 +19,13 @@ namespace ComplexLibrary
 		{
 			this->value = value;
 			return this->value;
+		}
+
+		ComplexPair& operator = (std::pair<T, N>& pair)
+		{
+			this->key = pair.first;
+			this->value = pair.second;
+			return *this;
 		}
 	};
 
@@ -66,6 +75,65 @@ namespace ComplexLibrary
 				T key = pair.key;
 				m_pairs.push_tail(pair);
 				m_keys.push_back(key);
+			}
+
+			m_size = nPtr_size;
+			m_capacity = nPtr_capacity;
+		}
+
+		ComplexMap(ComplexMap<T, N>&& ptr)
+		{
+			int nPtr_size = ptr.m_size;
+			int nPtr_capacity = ptr.m_capacity;
+
+			if (m_pairs.size() > 0)
+				m_pairs.clear();
+
+			if (m_keys.size() > 0)
+			{
+				m_keys.erase(0, m_keys.size() - 1);
+				m_keys.clear();
+			}
+
+			m_keys.reserve(nPtr_capacity);
+
+			for (int i = 0; i < nPtr_size; i++)
+			{
+				ComplexPair<T, N> pair = ptr.m_pairs.at(i);
+				T key = pair.key;
+				m_pairs.push_tail(pair);
+				m_keys.push_back(key);
+			}
+
+			m_size = nPtr_size;
+			m_capacity = nPtr_capacity;
+		}
+
+		ComplexMap(std::initializer_list<std::pair<T, N>> list)
+		{
+			int size = list.size();
+
+			int nPtr_size = size;
+			int nPtr_capacity = size;
+
+			if (m_pairs.size() > 0)
+				m_pairs.clear();
+
+			if (m_keys.size() > 0)
+			{
+				m_keys.erase(0, m_keys.size() - 1);
+				m_keys.clear();
+			}
+
+			m_keys.reserve(nPtr_capacity);
+
+			auto iter = list.begin();
+			while (iter != list.end())
+			{
+				std::pair<T, N> iter_pair = *iter;
+				m_pairs.push_tail(iter_pair.first, iter_pair.second);
+				m_keys.push_back(iter_pair.first);
+				iter++;
 			}
 
 			m_size = nPtr_size;
@@ -159,6 +227,19 @@ namespace ComplexLibrary
 			return iterator(nullptr);
 		}
 
+		// keyset 사용시 key에 담는 클래스에 < operator 구현할 것
+		ComplexSet<T> key_set()
+		{
+			ComplexSet<T> keyset;
+			auto key_iter = m_keys.begin();
+			while (key_iter != m_keys.end())
+			{
+				keyset.insert(key_iter->value);
+				key_iter++;
+			}
+			return keyset;
+		}
+
 		int size() const
 		{
 			return m_size;
@@ -207,6 +288,39 @@ namespace ComplexLibrary
 					m_keys.push_back(key);
 				}
 			}
+			return *this;
+		}
+
+		ComplexMap<T, N>& operator = (std::initializer_list<std::pair<T, N>> list)
+		{
+			int size = list.size();
+
+			int nPtr_size = size;
+			int nPtr_capacity = size;
+
+			if (m_pairs.size() > 0)
+				m_pairs.clear();
+
+			if (m_keys.size() > 0)
+			{
+				m_keys.erase(0, m_keys.size() - 1);
+				m_keys.clear();
+			}
+
+			m_keys.reserve(nPtr_capacity);
+
+			auto iter = list.begin();
+			while (iter != list.end())
+			{
+				std::pair<T, N> iter_pair = *iter;
+				m_pairs.push_tail(iter_pair.first, iter_pair.second);
+				m_keys.push_back(iter_pair.first);
+				iter++;
+			}
+
+			m_size = nPtr_size;
+			m_capacity = nPtr_capacity;
+
 			return *this;
 		}
 

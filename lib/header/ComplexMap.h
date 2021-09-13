@@ -210,7 +210,7 @@ namespace ComplexLibrary
 			return *this;
 		}
 
-		ComplexPair<T, N>& operator [] (T key)
+		N& operator [] (T key)
 		{
 			bool bFind = false;
 			int i = 0;
@@ -226,9 +226,9 @@ namespace ComplexLibrary
 			if (!bFind)
 			{
 				insert({ key , N() });
-				return m_pairs.at(m_size - 1);
+				return m_pairs.at(m_size - 1).value;
 			}
-			return m_pairs.at(i);
+			return m_pairs.at(i).value;
 		}
 
 	private:

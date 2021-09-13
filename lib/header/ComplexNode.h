@@ -13,6 +13,7 @@ namespace ComplexLibrary
 		template <typename T> friend class ComplexStack;
 		template <typename T> friend class ComplexNodeSet;
 		template <typename T> friend class ComplexSet;
+		template <typename T> friend class ComplexVector;
 
 	public:
 
@@ -79,4 +80,5 @@ namespace ComplexLibrary
 			m_castingPtr->value = value;
 		}
 	};
+
 }

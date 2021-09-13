@@ -3,7 +3,6 @@
 
 #include "pch.h"
 #include "framework.h"
-#include "ComplexVector.h"
 #include <iostream>
 
 // TODO: 라이브러리 함수의 예제입니다.

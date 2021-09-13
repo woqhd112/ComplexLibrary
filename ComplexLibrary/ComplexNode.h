@@ -81,26 +81,4 @@ namespace ComplexLibrary
 		}
 	};
 
-	template <typename T>
-	class ComplexNodeArray
-	{
-		template <typename T> friend class ComplexArrayList;
-	public:
-
-		T value;
-
-		ComplexNodeArray()
-		{
-		
-		}
-
-		~ComplexNodeArray()
-		{
-		
-		}
-
-	private:
-
-
-	};
 }

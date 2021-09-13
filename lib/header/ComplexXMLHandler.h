@@ -25,7 +25,7 @@ namespace ComplexLibrary
 
 		}
 
-		~ComplexXMLTreeElem()
+		virtual ~ComplexXMLTreeElem()
 		{
 			for (int i = 0; i < (int)m_childElemVector.size(); i++)
 			{
@@ -56,7 +56,7 @@ namespace ComplexLibrary
 
 		}
 
-		~ComplexXMLHandler()
+		virtual ~ComplexXMLHandler()
 		{
 			Release();
 		}

@@ -23,7 +23,7 @@ namespace ComplexLibrary
 			m_positionElem = m_processElem;
 		}
 
-		~ComplexXMLParsor()
+		virtual ~ComplexXMLParsor()
 		{
 			m_processElem = nullptr;
 			m_positionElem = nullptr;

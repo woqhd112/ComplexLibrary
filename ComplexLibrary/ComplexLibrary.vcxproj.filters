@@ -163,7 +163,7 @@
     <ClInclude Include="ComplexFile.h">
       <Filter>Process\IO</Filter>
     </ClInclude>
-    <ClInclude Include="ComplexArrayList.h">
+    <ClInclude Include="ComplexDeque.h">
       <Filter>Container</Filter>
     </ClInclude>
   </ItemGroup>

@@ -3,869 +3,872 @@
 #include "ComplexString.h"
 #include <math.h>
 
-class ComplexVariant
+namespace ComplexLibrary
 {
-public:
-
-	enum ComplexVariantType
+	class ComplexVariant
 	{
-		CVT_NONE = 0,
-		CVT_BOOL,
-		CVT_INT,
-		CVT_DOUBLE,
-		CVT_STRING
-	};
+	public:
 
-	ComplexVariant()
-		: cvt(CVT_NONE), b_variant(false), i_variant(0), f_variant(0.0), s_variant()
-	{
-
-	}
-
-	ComplexVariant(bool variant)
-		: cvt(CVT_BOOL), b_variant(variant), i_variant(0), f_variant(0.0), s_variant()
-	{
-
-	}
-
-	ComplexVariant(int variant)
-		: cvt(CVT_INT), b_variant(false), i_variant(variant), f_variant(0.0), s_variant()
-	{
-
-	}
-
-	ComplexVariant(double variant)
-		: cvt(CVT_DOUBLE), b_variant(false), i_variant(0), f_variant(variant), s_variant()
-	{
-
-	}
-
-	ComplexVariant(ComplexString variant)
-		: cvt(CVT_STRING), b_variant(false), i_variant(0), f_variant(0.0), s_variant(variant)
-	{
-
-	}
-
-	ComplexVariant(const char* variant)
-		: cvt(CVT_STRING), b_variant(false), i_variant(0), f_variant(0.0), s_variant(variant)
-	{
-
-	}
-
-	ComplexVariant(const ComplexVariant& variant)
-		: cvt(CVT_NONE), b_variant(false), i_variant(0), f_variant(0.0), s_variant("")
-	{
-		cvt = variant.cvt;
-		b_variant = variant.b_variant;
-		i_variant = variant.i_variant;
-		f_variant = variant.f_variant;
-		s_variant = const_cast<ComplexString&>(variant.s_variant);
-	}
-
-	~ComplexVariant()
-	{
-
-	}
-
-	ComplexVariantType GetVariantType() const
-	{
-		return cvt;
-	}
-
-	bool GetBoolean() const
-	{
-		return b_variant;
-	}
-
-	int GetInteger() const
-	{
-		return i_variant;
-	}
-
-	double GetDouble() const
-	{
-		return f_variant;
-	}
-
-	ComplexString GetString() const
-	{
-		return s_variant;
-	}
-
-	operator int()
-	{
-		if (cvt == CVT_BOOL)
+		enum ComplexVariantType
 		{
-			i_variant = static_cast<int>(b_variant);
-			b_variant = false;
-		}
-		else if (cvt == CVT_INT)
+			CVT_NONE = 0,
+			CVT_BOOL,
+			CVT_INT,
+			CVT_DOUBLE,
+			CVT_STRING
+		};
+
+		ComplexVariant()
+			: cvt(CVT_NONE), b_variant(false), i_variant(0), f_variant(0.0), s_variant()
 		{
-			// do nothing
-		}
-		else if (cvt == CVT_DOUBLE)
-		{
-			i_variant = static_cast<int>(f_variant);
-			f_variant = 0.0;
-		}
-		else if (cvt == CVT_STRING)
-		{
-			i_variant = atoi(s_variant.GetBuffer());
-			s_variant = "";
+
 		}
 
-		cvt = CVT_INT;
+		ComplexVariant(bool variant)
+			: cvt(CVT_BOOL), b_variant(variant), i_variant(0), f_variant(0.0), s_variant()
+		{
 
-		return i_variant;
-	}
-
-	operator double()
-	{
-		if (cvt == CVT_BOOL)
-		{
-			f_variant = static_cast<double>(b_variant);
-			b_variant = false;
-		}
-		else if (cvt == CVT_INT)
-		{
-			f_variant = static_cast<double>(i_variant);
-			i_variant = 0;
-		}
-		else if (cvt == CVT_DOUBLE)
-		{
-			// do nothing
-		}
-		else if (cvt == CVT_STRING)
-		{
-			f_variant = atof(s_variant.GetBuffer());
-			s_variant = "";
 		}
 
-		cvt = CVT_DOUBLE;
+		ComplexVariant(int variant)
+			: cvt(CVT_INT), b_variant(false), i_variant(variant), f_variant(0.0), s_variant()
+		{
 
-		return f_variant;
-	}
-
-	operator bool()
-	{
-		if (cvt == CVT_BOOL)
-		{
-			// do nothing
-		}
-		else if (cvt == CVT_INT)
-		{
-			b_variant = static_cast<bool>(i_variant);
-			i_variant = 0;
-		}
-		else if (cvt == CVT_DOUBLE)
-		{
-			b_variant = static_cast<bool>(f_variant);
-			f_variant = 0.0;
-		}
-		else if (cvt == CVT_STRING)
-		{
-			b_variant = static_cast<bool>(atoi(s_variant.GetBuffer()));
-			s_variant = "";
 		}
 
-		cvt = CVT_DOUBLE;
+		ComplexVariant(double variant)
+			: cvt(CVT_DOUBLE), b_variant(false), i_variant(0), f_variant(variant), s_variant()
+		{
 
-		return b_variant;
-	}
-
-	operator ComplexString()
-	{
-		if (cvt == CVT_BOOL)
-		{
-			ComplexString buf;
-			buf.Format("%d", b_variant);
-			s_variant = buf;
-			b_variant = false;
-		}
-		else if (cvt == CVT_INT)
-		{
-			ComplexString buf;
-			buf.Format("%d", i_variant);
-			s_variant = buf;
-			i_variant = 0;
-		}
-		else if (cvt == CVT_DOUBLE)
-		{
-			ComplexString buf;
-			buf.Format("%f", f_variant);
-			s_variant = buf;
-			f_variant = 0.0;
-		}
-		else if (cvt == CVT_STRING)
-		{
-			// do nothing
 		}
 
-		return s_variant;
-	}
+		ComplexVariant(ComplexString variant)
+			: cvt(CVT_STRING), b_variant(false), i_variant(0), f_variant(0.0), s_variant(variant)
+		{
 
-	operator const char*()
-	{
-		if (cvt == CVT_BOOL)
-		{
-			ComplexString buf;
-			buf.Format("%d", b_variant);
-			s_variant = buf;
-			b_variant = false;
-		}
-		else if (cvt == CVT_INT)
-		{
-			ComplexString buf;
-			buf.Format("%d", i_variant);
-			s_variant = buf;
-			i_variant = 0;
-		}
-		else if (cvt == CVT_DOUBLE)
-		{
-			ComplexString buf;
-			buf.Format("%f", f_variant);
-			s_variant = buf;
-			f_variant = 0.0;
-		}
-		else if (cvt == CVT_STRING)
-		{
-			// do nothing
 		}
 
-		return s_variant.GetBuffer();
-	}
+		ComplexVariant(const char* variant)
+			: cvt(CVT_STRING), b_variant(false), i_variant(0), f_variant(0.0), s_variant(variant)
+		{
 
-	ComplexVariant& operator = (bool variant)
-	{
-		if (cvt == CVT_BOOL)
-		{
-			// do nothing
-		}
-		else if (cvt == CVT_INT)
-		{
-			b_variant = variant;
-			i_variant = 0;
-		}
-		else if (cvt == CVT_DOUBLE)
-		{
-			b_variant = variant;
-			f_variant = 0.0;
-		}
-		else if (cvt == CVT_STRING)
-		{
-			b_variant = variant;
-			s_variant = "";
 		}
 
-		cvt = CVT_BOOL;
-
-		return *this;
-	}
-
-	ComplexVariant& operator = (int variant)
-	{
-		if (cvt == CVT_BOOL)
+		ComplexVariant(const ComplexVariant& variant)
+			: cvt(CVT_NONE), b_variant(false), i_variant(0), f_variant(0.0), s_variant("")
 		{
-			i_variant = variant;
-			b_variant = false;
-		}
-		else if (cvt == CVT_INT)
-		{
-			// do nothing
-		}
-		else if (cvt == CVT_DOUBLE)
-		{
-			i_variant = variant;
-			f_variant = 0.0;
-		}
-		else if (cvt == CVT_STRING)
-		{
-			i_variant = variant;
-			s_variant = "";
+			cvt = variant.cvt;
+			b_variant = variant.b_variant;
+			i_variant = variant.i_variant;
+			f_variant = variant.f_variant;
+			s_variant = const_cast<ComplexString&>(variant.s_variant);
 		}
 
-		cvt = CVT_INT;
+		~ComplexVariant()
+		{
 
-		return *this;
-	}
-
-	ComplexVariant& operator = (double variant)
-	{
-		if (cvt == CVT_BOOL)
-		{
-			f_variant = variant;
-			b_variant = false;
-		}
-		else if (cvt == CVT_INT)
-		{
-			f_variant = variant;
-			i_variant = 0;
-		}
-		else if (cvt == CVT_DOUBLE)
-		{
-			// do nothing
-		}
-		else if (cvt == CVT_STRING)
-		{
-			f_variant = variant;
-			s_variant = "";
 		}
 
-		cvt = CVT_DOUBLE;
-
-		return *this;
-	}
-
-	ComplexVariant& operator = (ComplexString& variant)
-	{
-		if (cvt == CVT_BOOL)
+		ComplexVariantType GetVariantType() const
 		{
-			s_variant = variant;
-			i_variant = 0;
-		}
-		else if (cvt == CVT_INT)
-		{
-			s_variant = variant;
-			i_variant = 0;
-		}
-		else if (cvt == CVT_DOUBLE)
-		{
-			s_variant = variant;
-			f_variant = 0.0;
-		}
-		else if (cvt == CVT_STRING)
-		{
-			// do nothing
+			return cvt;
 		}
 
-		cvt = CVT_STRING;
+		bool GetBoolean() const
+		{
+			return b_variant;
+		}
 
-		return *this;
-	}
+		int GetInteger() const
+		{
+			return i_variant;
+		}
 
-	ComplexVariant& operator = (ComplexVariant& variant)
-	{
-		cvt = variant.cvt;
-		b_variant = variant.b_variant;
-		i_variant = variant.i_variant;
-		f_variant = variant.f_variant;
-		s_variant = variant.s_variant;
+		double GetDouble() const
+		{
+			return f_variant;
+		}
 
-		return *this;
-	}
+		ComplexString GetString() const
+		{
+			return s_variant;
+		}
 
-	ComplexVariant operator + (int variant)
-	{
-		ComplexVariant tmp;
-		tmp = *this;
-		if (cvt == CVT_INT)
+		operator int()
 		{
-			tmp.i_variant += variant;
-		}
-		else if (cvt == CVT_DOUBLE)
-		{
-			tmp.f_variant += static_cast<double>(variant);
-		}
-		else if (cvt == CVT_STRING)
-		{
-			ComplexString buf;
-			buf.Format("%d", variant);
-			tmp.s_variant += buf;
-		}
-		return tmp;
-	}
-
-	ComplexVariant operator + (double variant)
-	{
-		ComplexVariant tmp;
-		tmp = *this;
-		if (cvt == CVT_INT)
-		{
-			tmp.i_variant += static_cast<int>(variant);
-		}
-		else if (cvt == CVT_DOUBLE)
-		{
-			tmp.f_variant += variant;
-		}
-		else if (cvt == CVT_STRING)
-		{
-			ComplexString buf;
-			buf.Format("%f", variant);
-			tmp.s_variant += buf;
-		}
-		return tmp;
-	}
-
-	ComplexVariant operator + (ComplexString variant)
-	{
-		ComplexVariant tmp;
-		tmp = *this;
-		if (cvt == CVT_INT)
-		{
-			tmp.i_variant += atoi(variant);
-		}
-		else if (cvt == CVT_DOUBLE)
-		{
-			tmp.f_variant += atof(variant);
-		}
-		else if (cvt == CVT_STRING)
-		{
-			tmp.s_variant += variant;
-		}
-		return tmp;
-	}
-
-	ComplexVariant operator + (const char* variant)
-	{
-		ComplexVariant tmp;
-		tmp = *this;
-		if (cvt == CVT_INT)
-		{
-			tmp.i_variant += atoi(variant);
-		}
-		else if (cvt == CVT_DOUBLE)
-		{
-			tmp.f_variant += atof(variant);
-		}
-		else if (cvt == CVT_STRING)
-		{
-			tmp.s_variant += variant;
-		}
-		return tmp;
-	}
-
-	ComplexVariant operator + (ComplexVariant variant)
-	{
-		ComplexVariant tmp;
-		tmp = *this;
-		if (cvt == CVT_INT)
-		{
-			if (variant.cvt == CVT_INT)
+			if (cvt == CVT_BOOL)
 			{
-				tmp.i_variant += variant.i_variant;
+				i_variant = static_cast<int>(b_variant);
+				b_variant = false;
 			}
-			else if (variant.cvt == CVT_DOUBLE)
+			else if (cvt == CVT_INT)
 			{
-				tmp.i_variant += static_cast<int>(variant.f_variant);
+				// do nothing
 			}
-			else if (variant.cvt == CVT_STRING)
+			else if (cvt == CVT_DOUBLE)
 			{
-				tmp.i_variant += atoi(variant.s_variant);
+				i_variant = static_cast<int>(f_variant);
+				f_variant = 0.0;
 			}
+			else if (cvt == CVT_STRING)
+			{
+				i_variant = atoi(s_variant.GetBuffer());
+				s_variant = "";
+			}
+
+			cvt = CVT_INT;
+
+			return i_variant;
 		}
-		else if (cvt == CVT_DOUBLE)
+
+		operator double()
 		{
-			if (variant.cvt == CVT_INT)
+			if (cvt == CVT_BOOL)
 			{
-				tmp.f_variant += static_cast<double>(variant.i_variant);
+				f_variant = static_cast<double>(b_variant);
+				b_variant = false;
 			}
-			else if (variant.cvt == CVT_DOUBLE)
+			else if (cvt == CVT_INT)
 			{
-				tmp.f_variant += variant.f_variant;
+				f_variant = static_cast<double>(i_variant);
+				i_variant = 0;
 			}
-			else if (variant.cvt == CVT_STRING)
+			else if (cvt == CVT_DOUBLE)
 			{
-				tmp.f_variant += atof(variant.s_variant);
+				// do nothing
 			}
+			else if (cvt == CVT_STRING)
+			{
+				f_variant = atof(s_variant.GetBuffer());
+				s_variant = "";
+			}
+
+			cvt = CVT_DOUBLE;
+
+			return f_variant;
 		}
-		else if (cvt == CVT_STRING)
+
+		operator bool()
 		{
-			if (variant.cvt == CVT_INT)
+			if (cvt == CVT_BOOL)
+			{
+				// do nothing
+			}
+			else if (cvt == CVT_INT)
+			{
+				b_variant = static_cast<bool>(i_variant);
+				i_variant = 0;
+			}
+			else if (cvt == CVT_DOUBLE)
+			{
+				b_variant = static_cast<bool>(f_variant);
+				f_variant = 0.0;
+			}
+			else if (cvt == CVT_STRING)
+			{
+				b_variant = static_cast<bool>(atoi(s_variant.GetBuffer()));
+				s_variant = "";
+			}
+
+			cvt = CVT_DOUBLE;
+
+			return b_variant;
+		}
+
+		operator ComplexString()
+		{
+			if (cvt == CVT_BOOL)
+			{
+				ComplexString buf;
+				buf.Format("%d", b_variant);
+				s_variant = buf;
+				b_variant = false;
+			}
+			else if (cvt == CVT_INT)
+			{
+				ComplexString buf;
+				buf.Format("%d", i_variant);
+				s_variant = buf;
+				i_variant = 0;
+			}
+			else if (cvt == CVT_DOUBLE)
+			{
+				ComplexString buf;
+				buf.Format("%f", f_variant);
+				s_variant = buf;
+				f_variant = 0.0;
+			}
+			else if (cvt == CVT_STRING)
+			{
+				// do nothing
+			}
+
+			return s_variant;
+		}
+
+		operator const char*()
+		{
+			if (cvt == CVT_BOOL)
+			{
+				ComplexString buf;
+				buf.Format("%d", b_variant);
+				s_variant = buf;
+				b_variant = false;
+			}
+			else if (cvt == CVT_INT)
+			{
+				ComplexString buf;
+				buf.Format("%d", i_variant);
+				s_variant = buf;
+				i_variant = 0;
+			}
+			else if (cvt == CVT_DOUBLE)
+			{
+				ComplexString buf;
+				buf.Format("%f", f_variant);
+				s_variant = buf;
+				f_variant = 0.0;
+			}
+			else if (cvt == CVT_STRING)
+			{
+				// do nothing
+			}
+
+			return s_variant.GetBuffer();
+		}
+
+		ComplexVariant& operator = (bool variant)
+		{
+			if (cvt == CVT_BOOL)
+			{
+				// do nothing
+			}
+			else if (cvt == CVT_INT)
+			{
+				b_variant = variant;
+				i_variant = 0;
+			}
+			else if (cvt == CVT_DOUBLE)
+			{
+				b_variant = variant;
+				f_variant = 0.0;
+			}
+			else if (cvt == CVT_STRING)
+			{
+				b_variant = variant;
+				s_variant = "";
+			}
+
+			cvt = CVT_BOOL;
+
+			return *this;
+		}
+
+		ComplexVariant& operator = (int variant)
+		{
+			if (cvt == CVT_BOOL)
+			{
+				i_variant = variant;
+				b_variant = false;
+			}
+			else if (cvt == CVT_INT)
+			{
+				// do nothing
+			}
+			else if (cvt == CVT_DOUBLE)
+			{
+				i_variant = variant;
+				f_variant = 0.0;
+			}
+			else if (cvt == CVT_STRING)
+			{
+				i_variant = variant;
+				s_variant = "";
+			}
+
+			cvt = CVT_INT;
+
+			return *this;
+		}
+
+		ComplexVariant& operator = (double variant)
+		{
+			if (cvt == CVT_BOOL)
+			{
+				f_variant = variant;
+				b_variant = false;
+			}
+			else if (cvt == CVT_INT)
+			{
+				f_variant = variant;
+				i_variant = 0;
+			}
+			else if (cvt == CVT_DOUBLE)
+			{
+				// do nothing
+			}
+			else if (cvt == CVT_STRING)
+			{
+				f_variant = variant;
+				s_variant = "";
+			}
+
+			cvt = CVT_DOUBLE;
+
+			return *this;
+		}
+
+		ComplexVariant& operator = (ComplexString& variant)
+		{
+			if (cvt == CVT_BOOL)
+			{
+				s_variant = variant;
+				i_variant = 0;
+			}
+			else if (cvt == CVT_INT)
+			{
+				s_variant = variant;
+				i_variant = 0;
+			}
+			else if (cvt == CVT_DOUBLE)
+			{
+				s_variant = variant;
+				f_variant = 0.0;
+			}
+			else if (cvt == CVT_STRING)
+			{
+				// do nothing
+			}
+
+			cvt = CVT_STRING;
+
+			return *this;
+		}
+
+		ComplexVariant& operator = (ComplexVariant& variant)
+		{
+			cvt = variant.cvt;
+			b_variant = variant.b_variant;
+			i_variant = variant.i_variant;
+			f_variant = variant.f_variant;
+			s_variant = variant.s_variant;
+
+			return *this;
+		}
+
+		ComplexVariant operator + (int variant)
+		{
+			ComplexVariant tmp;
+			tmp = *this;
+			if (cvt == CVT_INT)
+			{
+				tmp.i_variant += variant;
+			}
+			else if (cvt == CVT_DOUBLE)
+			{
+				tmp.f_variant += static_cast<double>(variant);
+			}
+			else if (cvt == CVT_STRING)
 			{
 				ComplexString buf;
 				buf.Format("%d", variant);
 				tmp.s_variant += buf;
 			}
-			else if (variant.cvt == CVT_DOUBLE)
+			return tmp;
+		}
+
+		ComplexVariant operator + (double variant)
+		{
+			ComplexVariant tmp;
+			tmp = *this;
+			if (cvt == CVT_INT)
+			{
+				tmp.i_variant += static_cast<int>(variant);
+			}
+			else if (cvt == CVT_DOUBLE)
+			{
+				tmp.f_variant += variant;
+			}
+			else if (cvt == CVT_STRING)
 			{
 				ComplexString buf;
 				buf.Format("%f", variant);
 				tmp.s_variant += buf;
 			}
-			else if (variant.cvt == CVT_STRING)
+			return tmp;
+		}
+
+		ComplexVariant operator + (ComplexString variant)
+		{
+			ComplexVariant tmp;
+			tmp = *this;
+			if (cvt == CVT_INT)
 			{
-				tmp.s_variant += variant.s_variant;
+				tmp.i_variant += atoi(variant);
 			}
+			else if (cvt == CVT_DOUBLE)
+			{
+				tmp.f_variant += atof(variant);
+			}
+			else if (cvt == CVT_STRING)
+			{
+				tmp.s_variant += variant;
+			}
+			return tmp;
 		}
-		return tmp;
-	}
 
-	ComplexVariant& operator += (int variant)
-	{
-		if (cvt == CVT_INT)
+		ComplexVariant operator + (const char* variant)
 		{
-			i_variant += variant;
+			ComplexVariant tmp;
+			tmp = *this;
+			if (cvt == CVT_INT)
+			{
+				tmp.i_variant += atoi(variant);
+			}
+			else if (cvt == CVT_DOUBLE)
+			{
+				tmp.f_variant += atof(variant);
+			}
+			else if (cvt == CVT_STRING)
+			{
+				tmp.s_variant += variant;
+			}
+			return tmp;
 		}
-		else if (cvt == CVT_DOUBLE)
-		{
-			f_variant += static_cast<double>(variant);
-		}
-		else if (cvt == CVT_STRING)
-		{
-			ComplexString tmp;
-			tmp.Format("%d", variant);
-			s_variant += tmp;
-		}
-		return *this;
-	}
 
-	ComplexVariant& operator += (double variant)
-	{
-		if (cvt == CVT_INT)
+		ComplexVariant operator + (ComplexVariant variant)
 		{
-			i_variant += static_cast<int>(variant);
+			ComplexVariant tmp;
+			tmp = *this;
+			if (cvt == CVT_INT)
+			{
+				if (variant.cvt == CVT_INT)
+				{
+					tmp.i_variant += variant.i_variant;
+				}
+				else if (variant.cvt == CVT_DOUBLE)
+				{
+					tmp.i_variant += static_cast<int>(variant.f_variant);
+				}
+				else if (variant.cvt == CVT_STRING)
+				{
+					tmp.i_variant += atoi(variant.s_variant);
+				}
+			}
+			else if (cvt == CVT_DOUBLE)
+			{
+				if (variant.cvt == CVT_INT)
+				{
+					tmp.f_variant += static_cast<double>(variant.i_variant);
+				}
+				else if (variant.cvt == CVT_DOUBLE)
+				{
+					tmp.f_variant += variant.f_variant;
+				}
+				else if (variant.cvt == CVT_STRING)
+				{
+					tmp.f_variant += atof(variant.s_variant);
+				}
+			}
+			else if (cvt == CVT_STRING)
+			{
+				if (variant.cvt == CVT_INT)
+				{
+					ComplexString buf;
+					buf.Format("%d", variant);
+					tmp.s_variant += buf;
+				}
+				else if (variant.cvt == CVT_DOUBLE)
+				{
+					ComplexString buf;
+					buf.Format("%f", variant);
+					tmp.s_variant += buf;
+				}
+				else if (variant.cvt == CVT_STRING)
+				{
+					tmp.s_variant += variant.s_variant;
+				}
+			}
+			return tmp;
 		}
-		else if (cvt == CVT_DOUBLE)
-		{
-			f_variant += variant;
-		}
-		else if (cvt == CVT_STRING)
-		{
-			ComplexString tmp;
-			tmp.Format("%f", variant);
-			s_variant += tmp;
-		}
-		return *this;
-	}
 
-	ComplexVariant& operator += (ComplexString variant)
-	{
-		if (cvt == CVT_INT)
+		ComplexVariant& operator += (int variant)
 		{
-			i_variant += atoi(variant);
+			if (cvt == CVT_INT)
+			{
+				i_variant += variant;
+			}
+			else if (cvt == CVT_DOUBLE)
+			{
+				f_variant += static_cast<double>(variant);
+			}
+			else if (cvt == CVT_STRING)
+			{
+				ComplexString tmp;
+				tmp.Format("%d", variant);
+				s_variant += tmp;
+			}
+			return *this;
 		}
-		else if (cvt == CVT_DOUBLE)
+
+		ComplexVariant& operator += (double variant)
 		{
-			f_variant += atof(variant);
+			if (cvt == CVT_INT)
+			{
+				i_variant += static_cast<int>(variant);
+			}
+			else if (cvt == CVT_DOUBLE)
+			{
+				f_variant += variant;
+			}
+			else if (cvt == CVT_STRING)
+			{
+				ComplexString tmp;
+				tmp.Format("%f", variant);
+				s_variant += tmp;
+			}
+			return *this;
 		}
-		else if (cvt == CVT_STRING)
+
+		ComplexVariant& operator += (ComplexString variant)
 		{
-			s_variant += variant;
+			if (cvt == CVT_INT)
+			{
+				i_variant += atoi(variant);
+			}
+			else if (cvt == CVT_DOUBLE)
+			{
+				f_variant += atof(variant);
+			}
+			else if (cvt == CVT_STRING)
+			{
+				s_variant += variant;
+			}
+			return *this;
 		}
-		return *this;
-	}
 
-	ComplexVariant& operator += (const char* variant)
-	{
-		if (cvt == CVT_INT)
+		ComplexVariant& operator += (const char* variant)
 		{
-			i_variant += atoi(variant);
+			if (cvt == CVT_INT)
+			{
+				i_variant += atoi(variant);
+			}
+			else if (cvt == CVT_DOUBLE)
+			{
+				f_variant += atof(variant);
+			}
+			else if (cvt == CVT_STRING)
+			{
+				s_variant += variant;
+			}
+			return *this;
 		}
-		else if (cvt == CVT_DOUBLE)
+
+		ComplexVariant operator - (int variant)
 		{
-			f_variant += atof(variant);
+			ComplexVariant tmp;
+			tmp = *this;
+			if (cvt == CVT_INT)
+			{
+				tmp.i_variant += variant;
+			}
+			else if (cvt == CVT_DOUBLE)
+			{
+				tmp.f_variant += static_cast<double>(variant);
+			}
+			return tmp;
 		}
-		else if (cvt == CVT_STRING)
+
+		ComplexVariant operator - (double variant)
 		{
-			s_variant += variant;
+			ComplexVariant tmp;
+			tmp = *this;
+			if (cvt == CVT_INT)
+			{
+				tmp.i_variant += static_cast<int>(variant);
+			}
+			else if (cvt == CVT_DOUBLE)
+			{
+				tmp.f_variant += variant;
+			}
+			return tmp;
 		}
-		return *this;
-	}
 
-	ComplexVariant operator - (int variant)
-	{
-		ComplexVariant tmp;
-		tmp = *this;
-		if (cvt == CVT_INT)
+		ComplexVariant operator -= (int variant)
 		{
-			tmp.i_variant += variant;
+			if (cvt == CVT_INT)
+			{
+				i_variant += variant;
+			}
+			else if (cvt == CVT_DOUBLE)
+			{
+				f_variant += static_cast<double>(variant);
+			}
+			return *this;
 		}
-		else if (cvt == CVT_DOUBLE)
+
+		ComplexVariant& operator -= (double variant)
 		{
-			tmp.f_variant += static_cast<double>(variant);
+			if (cvt == CVT_INT)
+			{
+				i_variant += static_cast<int>(variant);
+			}
+			else if (cvt == CVT_DOUBLE)
+			{
+				f_variant += variant;
+			}
+			return *this;
 		}
-		return tmp;
-	}
 
-	ComplexVariant operator - (double variant)
-	{
-		ComplexVariant tmp;
-		tmp = *this;
-		if (cvt == CVT_INT)
+		ComplexVariant operator * (int variant)
 		{
-			tmp.i_variant += static_cast<int>(variant);
+			ComplexVariant tmp;
+			tmp = *this;
+			if (cvt == CVT_INT)
+			{
+				tmp.i_variant *= variant;
+			}
+			else if (cvt == CVT_DOUBLE)
+			{
+				tmp.f_variant *= static_cast<double>(variant);
+			}
+			return tmp;
 		}
-		else if (cvt == CVT_DOUBLE)
+
+		ComplexVariant operator * (double variant)
 		{
-			tmp.f_variant += variant;
+			ComplexVariant tmp;
+			tmp = *this;
+			if (cvt == CVT_INT)
+			{
+				tmp.i_variant *= static_cast<int>(variant);
+			}
+			else if (cvt == CVT_DOUBLE)
+			{
+				tmp.f_variant *= variant;
+			}
+			return tmp;
 		}
-		return tmp;
-	}
 
-	ComplexVariant operator -= (int variant)
-	{
-		if (cvt == CVT_INT)
+		ComplexVariant& operator *= (int variant)
 		{
-			i_variant += variant;
+			if (cvt == CVT_INT)
+			{
+				i_variant *= variant;
+			}
+			else if (cvt == CVT_DOUBLE)
+			{
+				f_variant *= static_cast<double>(variant);
+			}
+			return *this;
 		}
-		else if (cvt == CVT_DOUBLE)
+
+		ComplexVariant& operator *= (double variant)
 		{
-			f_variant += static_cast<double>(variant);
+			if (cvt == CVT_INT)
+			{
+				i_variant *= static_cast<int>(variant);
+			}
+			else if (cvt == CVT_DOUBLE)
+			{
+				f_variant *= variant;
+			}
+			return *this;
 		}
-		return *this;
-	}
 
-	ComplexVariant& operator -= (double variant)
-	{
-		if (cvt == CVT_INT)
+		ComplexVariant operator / (int variant)
 		{
-			i_variant += static_cast<int>(variant);
+			ComplexVariant tmp;
+			tmp = *this;
+			if (cvt == CVT_INT)
+			{
+				tmp.i_variant /= variant;
+			}
+			else if (cvt == CVT_DOUBLE)
+			{
+				tmp.f_variant /= static_cast<double>(variant);
+			}
+			return tmp;
 		}
-		else if (cvt == CVT_DOUBLE)
+
+		ComplexVariant operator / (double variant)
 		{
-			f_variant += variant;
+			ComplexVariant tmp;
+			tmp = *this;
+			if (cvt == CVT_INT)
+			{
+				tmp.i_variant /= static_cast<int>(variant);
+			}
+			else if (cvt == CVT_DOUBLE)
+			{
+				tmp.f_variant /= variant;
+			}
+			return tmp;
 		}
-		return *this;
-	}
 
-	ComplexVariant operator * (int variant)
-	{
-		ComplexVariant tmp;
-		tmp = *this;
-		if (cvt == CVT_INT)
+		ComplexVariant& operator /= (int variant)
 		{
-			tmp.i_variant *= variant;
+			if (cvt == CVT_INT)
+			{
+				i_variant /= variant;
+			}
+			else if (cvt == CVT_DOUBLE)
+			{
+				f_variant /= static_cast<double>(variant);
+			}
+			return *this;
 		}
-		else if (cvt == CVT_DOUBLE)
+
+		ComplexVariant& operator /= (double variant)
 		{
-			tmp.f_variant *= static_cast<double>(variant);
+			if (cvt == CVT_INT)
+			{
+				i_variant /= static_cast<int>(variant);
+			}
+			else if (cvt == CVT_DOUBLE)
+			{
+				f_variant /= variant;
+			}
+			return *this;
 		}
-		return tmp;
-	}
 
-	ComplexVariant operator * (double variant)
-	{
-		ComplexVariant tmp;
-		tmp = *this;
-		if (cvt == CVT_INT)
+		ComplexVariant& operator % (int variant)
 		{
-			tmp.i_variant *= static_cast<int>(variant);
+			ComplexVariant tmp;
+			tmp = *this;
+			if (cvt == CVT_INT)
+			{
+				tmp.i_variant %= variant;
+			}
+			else if (cvt == CVT_DOUBLE)
+			{
+				tmp.f_variant = fmod(f_variant, static_cast<double>(variant));
+			}
+			return tmp;
 		}
-		else if (cvt == CVT_DOUBLE)
+
+		ComplexVariant operator % (double variant)
 		{
-			tmp.f_variant *= variant;
+			ComplexVariant tmp;
+			tmp = *this;
+			if (cvt == CVT_INT)
+			{
+				tmp.i_variant %= static_cast<int>(variant);
+			}
+			else if (cvt == CVT_DOUBLE)
+			{
+				tmp.f_variant = fmod(f_variant, static_cast<double>(variant));
+			}
+			return tmp;
 		}
-		return tmp;
-	}
 
-	ComplexVariant& operator *= (int variant)
-	{
-		if (cvt == CVT_INT)
+		ComplexVariant operator %= (int variant)
 		{
-			i_variant *= variant;
+			if (cvt == CVT_INT)
+			{
+				i_variant %= variant;
+			}
+			else if (cvt == CVT_DOUBLE)
+			{
+				f_variant = fmod(f_variant, static_cast<double>(variant));
+			}
+			return *this;
 		}
-		else if (cvt == CVT_DOUBLE)
+
+		ComplexVariant& operator %= (double variant)
 		{
-			f_variant *= static_cast<double>(variant);
+			if (cvt == CVT_INT)
+			{
+				i_variant %= static_cast<int>(variant);
+			}
+			else if (cvt == CVT_DOUBLE)
+			{
+				f_variant = fmod(f_variant, static_cast<double>(variant));
+			}
+			return *this;
 		}
-		return *this;
-	}
 
-	ComplexVariant& operator *= (double variant)
-	{
-		if (cvt == CVT_INT)
+		bool operator == (bool variant)
 		{
-			i_variant *= static_cast<int>(variant);
+			if (cvt == CVT_BOOL)
+				return b_variant == variant;
+
+			return false;
 		}
-		else if (cvt == CVT_DOUBLE)
+
+		bool operator == (int variant)
 		{
-			f_variant *= variant;
-		}
-		return *this;
-	}
+			if (cvt == CVT_INT)
+				return i_variant == variant;
 
-	ComplexVariant operator / (int variant)
-	{
-		ComplexVariant tmp;
-		tmp = *this;
-		if (cvt == CVT_INT)
+			return false;
+		}
+
+		bool operator == (double variant)
 		{
-			tmp.i_variant /= variant;
+			if (cvt == CVT_DOUBLE)
+				return f_variant == variant;
+
+			return false;
 		}
-		else if (cvt == CVT_DOUBLE)
+
+		bool operator == (ComplexString variant)
 		{
-			tmp.f_variant /= static_cast<double>(variant);
-		}
-		return tmp;
-	}
+			if (cvt == CVT_STRING)
+				return s_variant == variant;
 
-	ComplexVariant operator / (double variant)
-	{
-		ComplexVariant tmp;
-		tmp = *this;
-		if (cvt == CVT_INT)
+			return false;
+		}
+
+		bool operator == (ComplexVariant& variant)
 		{
-			tmp.i_variant /= static_cast<int>(variant);
+			return (b_variant == variant.b_variant && i_variant == variant.i_variant && f_variant == variant.f_variant && s_variant == variant.s_variant);
 		}
-		else if (cvt == CVT_DOUBLE)
+
+		bool operator != (bool variant)
 		{
-			tmp.f_variant /= variant;
-		}
-		return tmp;
-	}
+			if (cvt == CVT_BOOL)
+				return b_variant != variant;
 
-	ComplexVariant& operator /= (int variant)
-	{
-		if (cvt == CVT_INT)
+			return true;
+		}
+
+		bool operator != (int variant)
 		{
-			i_variant /= variant;
+			if (cvt == CVT_INT)
+				return i_variant != variant;
+
+			return true;
 		}
-		else if (cvt == CVT_DOUBLE)
+
+		bool operator != (double variant)
 		{
-			f_variant /= static_cast<double>(variant);
-		}
-		return *this;
-	}
+			if (cvt == CVT_DOUBLE)
+				return f_variant != variant;
 
-	ComplexVariant& operator /= (double variant)
-	{
-		if (cvt == CVT_INT)
+			return true;
+		}
+
+		bool operator != (ComplexString variant)
 		{
-			i_variant /= static_cast<int>(variant);
+			if (cvt == CVT_STRING)
+				return s_variant != variant;
+
+			return true;
 		}
-		else if (cvt == CVT_DOUBLE)
+
+		bool operator != (ComplexVariant& variant)
 		{
-			f_variant /= variant;
+			return (b_variant != variant.b_variant || i_variant != variant.i_variant || f_variant != variant.f_variant || s_variant != variant.s_variant);
 		}
-		return *this;
-	}
 
-	ComplexVariant& operator % (int variant)
-	{
-		ComplexVariant tmp;
-		tmp = *this;
-		if (cvt == CVT_INT)
-		{
-			tmp.i_variant %= variant;
-		}
-		else if (cvt == CVT_DOUBLE)
-		{
-			tmp.f_variant = fmod(f_variant, static_cast<double>(variant));
-		}
-		return tmp;
-	}
+	private:
 
-	ComplexVariant operator % (double variant)
-	{
-		ComplexVariant tmp;
-		tmp = *this;
-		if (cvt == CVT_INT)
-		{
-			tmp.i_variant %= static_cast<int>(variant);
-		}
-		else if (cvt == CVT_DOUBLE)
-		{
-			tmp.f_variant = fmod(f_variant, static_cast<double>(variant));
-		}
-		return tmp;
-	}
+		ComplexVariantType cvt;
+		bool b_variant;
+		int i_variant;
+		double f_variant;
+		ComplexString s_variant;
 
-	ComplexVariant operator %= (int variant)
-	{
-		if (cvt == CVT_INT)
-		{
-			i_variant %= variant;
-		}
-		else if (cvt == CVT_DOUBLE)
-		{
-			f_variant = fmod(f_variant, static_cast<double>(variant));
-		}
-		return *this;
-	}
-
-	ComplexVariant& operator %= (double variant)
-	{
-		if (cvt == CVT_INT)
-		{
-			i_variant %= static_cast<int>(variant);
-		}
-		else if (cvt == CVT_DOUBLE)
-		{
-			f_variant = fmod(f_variant, static_cast<double>(variant));
-		}
-		return *this;
-	}
-
-	bool operator == (bool variant)
-	{
-		if (cvt == CVT_BOOL)
-			return b_variant == variant;
-
-		return false;
-	}
-
-	bool operator == (int variant)
-	{
-		if (cvt == CVT_INT)
-			return i_variant == variant;
-
-		return false;
-	}
-
-	bool operator == (double variant)
-	{
-		if (cvt == CVT_DOUBLE)
-			return f_variant == variant;
-
-		return false;
-	}
-
-	bool operator == (ComplexString variant)
-	{
-		if (cvt == CVT_STRING)
-			return s_variant == variant;
-
-		return false;
-	}
-
-	bool operator == (ComplexVariant& variant)
-	{
-		return (b_variant == variant.b_variant && i_variant == variant.i_variant && f_variant == variant.f_variant && s_variant == variant.s_variant);
-	}
-
-	bool operator != (bool variant)
-	{
-		if (cvt == CVT_BOOL)
-			return b_variant != variant;
-
-		return true;
-	}
-
-	bool operator != (int variant)
-	{
-		if (cvt == CVT_INT)
-			return i_variant != variant;
-
-		return true;
-	}
-
-	bool operator != (double variant)
-	{
-		if (cvt == CVT_DOUBLE)
-			return f_variant != variant;
-
-		return true;
-	}
-
-	bool operator != (ComplexString variant)
-	{
-		if (cvt == CVT_STRING)
-			return s_variant != variant;
-
-		return true;
-	}
-
-	bool operator != (ComplexVariant& variant)
-	{
-		return (b_variant != variant.b_variant || i_variant != variant.i_variant || f_variant != variant.f_variant || s_variant != variant.s_variant);
-	}
-
-private:
-
-	ComplexVariantType cvt;
-	bool b_variant;
-	int i_variant;
-	double f_variant;
-	ComplexString s_variant;
-
-};
+	};
+}
