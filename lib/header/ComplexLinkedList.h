@@ -79,15 +79,15 @@ namespace ComplexLibrary
 			m_head = node;
 		}
 
-		bool push(int index, T value)
+		void push(int index, T value)
 		{
-			if (m_size < index) return false;	// skip tail..
-			if (index < 0) return false;	// not treatment index
+			if (m_size < index || index < 0)
+				throw ComplexIndexOutOfBoundsException("linked list call index is out of bounds.", "ComplexLinkedList", "push");
 
 			if (m_head == nullptr || m_size == index)
 			{
 				push_tail(value);
-				return true;
+				return;
 			}
 
 			ComplexNode<T>* moveNode = m_head;
@@ -112,8 +112,6 @@ namespace ComplexLibrary
 			}
 
 			m_size++;
-
-			return true;
 		}
 
 		void clear()
@@ -131,10 +129,12 @@ namespace ComplexLibrary
 			m_size = 0;
 		}
 
-		bool erase(int index)
+		void erase(int index)
 		{
-			if (m_size <= index) return false;	// index out of bound 
-			if (index < 0) return false;	// not treatment index
+			if (m_size <= index || index < 0)
+				throw ComplexIndexOutOfBoundsException("linked list call index is out of bounds.", "ComplexLinkedList", "erase");
+			if (m_head == nullptr)
+				throw ComplexNullptrException("linked list head node is null point.", "ComplexLinkedList", "erase");
 
 			ComplexNode<T>* findNode = m_head;
 			ComplexNode<T>* nextNode = findNode;
@@ -155,23 +155,21 @@ namespace ComplexLibrary
 				cnt++;
 			}
 
-			if (findNode == nullptr)
-			{
-				return false;
-			}
-			else
+			if (findNode != nullptr)
 			{
 				m_size--;
 				nextNode->m_next = findNode->m_next;
 				delete findNode;
 			}
-
-
-			return true;
 		}
 
 		ComplexNode<T>* get_at(int index)
 		{
+			if (m_size <= index || index < 0)
+				throw ComplexIndexOutOfBoundsException("linked list call index is out of bounds.", "ComplexLinkedList", "get_at");
+			if (m_head == nullptr)
+				throw ComplexNullptrException("linked list head node is null point.", "ComplexLinkedList", "get_at");
+
 			ComplexNode<T>* findNode = m_head;
 
 			int cnt = 0;
@@ -200,6 +198,11 @@ namespace ComplexLibrary
 
 		T& at(int index)
 		{
+			if (m_size <= index || index < 0)
+				throw ComplexIndexOutOfBoundsException("linked list call index is out of bounds.", "ComplexLinkedList", "at");
+			if (m_head == nullptr)
+				throw ComplexNullptrException("linked list head node is null point.", "ComplexLinkedList", "at");
+
 			ComplexNode<T>* findNode = m_head;
 
 			int cnt = 0;
@@ -258,7 +261,7 @@ namespace ComplexLibrary
 			return *this;
 		}
 
-		ComplexLinkedList<T>& operator = (std::initializer_list<T> list)
+		ComplexLinkedList<T>& operator = (std::initializer_list<T>& list)
 		{
 			clear();
 			auto iter = list.begin();
@@ -269,5 +272,6 @@ namespace ComplexLibrary
 			}
 			return *this;
 		}
+
 	};
 }

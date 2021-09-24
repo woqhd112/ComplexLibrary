@@ -33,7 +33,22 @@ namespace ComplexLibrary
 			iterator iter = ptr.begin();
 			while (iter != ptr.end())
 			{
-				insert(iter);
+				insert(iter->value);
+				iter++;
+			}
+		}
+
+		ComplexSet(ComplexSet<T>&& ptr)
+			: m_size(0)
+			, m_root(nullptr)
+			, m_sortValue(nullptr)
+			, m_pos(m_root)
+		{
+			clear();
+			iterator iter = ptr.begin();
+			while (iter != ptr.end())
+			{
+				insert(iter->value);
 				iter++;
 			}
 		}
@@ -79,7 +94,7 @@ namespace ComplexLibrary
 		void erase(T value)
 		{
 			if (find_value(m_root, value) == false)
-				throw "Not Found Key";
+				throw ComplexNotFoundException("set call key is not found.", "ComplexSet", "erase");
 
 			// 삭제는 메인 value가 지워지면 too가 그자리를 대체
 			// 크기는 too > 메인 > little 순이므로
@@ -131,7 +146,7 @@ namespace ComplexLibrary
 
 			bool bCheckChildLittle = false;
 			if (parent->m_little == nullptr && parent->m_too == nullptr)
-				throw "Not Found Key";
+				throw ComplexNotFoundException("set call key is not found.", "ComplexSet", "erase");
 			else if (parent->m_little != nullptr)
 			{
 				if (parent->m_little->value == value)
@@ -318,7 +333,13 @@ namespace ComplexLibrary
 			m_size = other.m_size;
 			m_root = other.m_root;
 			m_sortValue = other.m_sortValue;
-			m_pos = other.m_pos;
+
+			iterator iter = other.begin();
+			while (iter != other.end())
+			{
+				insert(iter->value);
+				iter++;
+			}
 			return *this;
 		}
 

@@ -59,9 +59,9 @@ namespace ComplexLibrary
 			, m_useConnectionCount(0)
 		{
 			if (poolCapacity > MAX_POOL_CAPACITY)
-				throw "Max Pool Capacity";
+				throw ComplexCapacityOverflowException("pool insert capacity is maxsize.", "ComplexPool", "constructor");
 			else if (poolCapacity < 1)
-				throw "At least 1 capacity";
+				throw ComplexIndexOutOfBoundsException("pool insert capacity is at least 1.", "ComplexPool", "constructor");
 
 			for (int i = 1; i <= poolCapacity; i++)
 			{
@@ -160,9 +160,9 @@ namespace ComplexLibrary
 		void ReservePoolSize(int modifySize)
 		{
 			if (modifySize > MAX_POOL_CAPACITY)
-				throw "Max Pool Capacity";
+				throw ComplexCapacityOverflowException("pool insert capacity is maxsize.", "ComplexPool", "ReservePoolSize");
 			else if (modifySize < 1)
-				throw "At least 1 capacity";
+				throw ComplexIndexOutOfBoundsException("pool insert capacity is at least 1.", "ComplexPool", "ReservePoolSize");
 
 			int size_error = m_poolCapacity - modifySize;
 

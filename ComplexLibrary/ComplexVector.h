@@ -2,6 +2,7 @@
 #include <initializer_list>
 #include "ComplexIterator.h"
 
+
 namespace ComplexLibrary
 {
 	template <typename T>
@@ -145,8 +146,12 @@ namespace ComplexLibrary
 
 		T& at(int idx)
 		{
-			if (m_size <= 0) throw "Index Out of Bound";
-			if ((m_size - 1) < idx) throw "Index Out of Bound";
+			if (m_size <= 0)
+				throw ComplexIndexOutOfBoundsException("vector size is zero.", "ComplexVector", "at");
+			if ((m_size - 1) < idx)
+				throw ComplexIndexOutOfBoundsException("vector call index is out of bounds.", "ComplexVector", "at");
+			if (m_ptr == nullptr)
+				throw ComplexNullptrException("vector reference is null point.", "ComplexVector", "at");
 
 			return m_ptr[idx];
 		}
@@ -173,7 +178,10 @@ namespace ComplexLibrary
 
 		void erase(iterator iter)
 		{
-			if (m_size <= 0) throw "Index Out of Bound";
+			if (m_size <= 0)
+				throw ComplexIndexOutOfBoundsException("vector size is zero.", "ComplexVector", "erase");
+			if (m_ptr == nullptr)
+				throw ComplexNullptrException("vector reference is null point.", "ComplexVector", "erase");
 
 			bool bFind = false;
 			int i = 0;
@@ -192,8 +200,12 @@ namespace ComplexLibrary
 
 		void erase(int idx)
 		{
-			if (m_size <= 0) throw "Index Out of Bound";
-			if ((m_size - 1) < idx) throw "Index Out of Bound";
+			if (m_size <= 0)
+				throw ComplexIndexOutOfBoundsException("vector size is zero.", "ComplexVector", "erase");
+			if ((m_size - 1) < idx)
+				throw ComplexIndexOutOfBoundsException("vector call index is out of bounds.", "ComplexVector", "erase");
+			if (m_ptr == nullptr)
+				throw ComplexNullptrException("vector reference is null point.", "ComplexVector", "erase");
 
 			delete_node(m_ptr[idx]);
 
@@ -220,10 +232,16 @@ namespace ComplexLibrary
 
 		void erase(int startidx, int endidx)
 		{
-			if (m_size <= 0) throw "Index Out of Bound";
-			if ((m_size - 1) < startidx) throw "Index Out of Bound";
-			if ((m_size - 1) < endidx) throw "Index Out of Bound";
-			if (endidx < startidx) throw "Index Out of Bound";
+			if (m_size <= 0)
+				throw ComplexIndexOutOfBoundsException("vector size is zero.", "ComplexVector", "erase");
+			if ((m_size - 1) < startidx)
+				throw ComplexIndexOutOfBoundsException("vector call start index is out of bounds.", "ComplexVector", "erase");
+			if ((m_size - 1) < endidx)
+				throw ComplexIndexOutOfBoundsException("vector call end index is out of bounds.", "ComplexVector", "erase");
+			if (endidx < startidx)
+				throw ComplexIndexOutOfBoundsException("vector call start index is more than call end index.", "ComplexVector", "erase");
+			if (m_ptr == nullptr)
+				throw ComplexNullptrException("vector reference is null point.", "ComplexVector", "at");
 
 			T* tmp = new T[m_capacity];
 			int tmpidx = 0;
@@ -260,6 +278,24 @@ namespace ComplexLibrary
 		void clear()
 		{
 			m_size = 0;
+
+			if (m_ptr != nullptr)
+				delete[] m_ptr;
+
+			m_ptr = new T[m_capacity];
+
+			if (m_head != nullptr)
+			{
+				while (m_head->has_next())
+				{
+					ComplexNode<T>* nextNode = m_head->next();
+					delete m_head;
+					m_head = nullptr;
+					m_head = nextNode;
+				}
+				delete m_head;
+				m_head = nullptr;
+			}
 		}
 
 		int size() const
@@ -378,6 +414,8 @@ namespace ComplexLibrary
 					m_head = cursor->m_next;
 				}
 			}
+			delete cursor;
+			cursor = nullptr;
 		}
 	};
 }

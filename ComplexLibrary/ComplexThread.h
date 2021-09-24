@@ -4,7 +4,6 @@
 
 namespace ComplexLibrary
 {
-	unsigned __stdcall MainThread(void* param);
 
 	class ComplexThread
 	{
@@ -25,6 +24,14 @@ namespace ComplexLibrary
 		virtual ~ComplexThread()
 		{
 
+		}
+
+		static unsigned __stdcall MainThread(void* param)
+		{
+			ComplexThread* pThis = (ComplexThread*)param;
+			pThis->Run();
+
+			return 0;
 		}
 
 		bool Start()
@@ -74,7 +81,7 @@ namespace ComplexLibrary
 			std::this_thread::sleep_for(std::chrono::milliseconds(millisecond));
 		}
 
-		static void Yield()
+		static void YieldThread()
 		{
 			std::this_thread::yield();
 		}
@@ -90,12 +97,4 @@ namespace ComplexLibrary
 		bool m_sleep;
 
 	};
-
-	unsigned __stdcall MainThread(void* param)
-	{
-		ComplexThread* pThis = (ComplexThread*)param;
-		pThis->Run();
-
-		return 0;
-	}
 }

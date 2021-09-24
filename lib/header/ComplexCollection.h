@@ -7,6 +7,7 @@
 #include "ComplexStack.h"
 #include "ComplexVector.h"
 #include "ComplexSingleton.h"
+#include "ComplexDeque.h"
 
 namespace ComplexLibrary
 {
@@ -94,6 +95,18 @@ namespace ComplexLibrary
 		void ClearListInstance()
 		{
 			ComplexSingleton<ComplexLinkedList<T>>::DestroyInstance();
+		}
+
+		template <typename T>
+		ComplexDeque<T>* GetDequeInstance()
+		{
+			return ComplexSingleton<ComplexDeque<T>>::GetInstancePtr();
+		}
+
+		template <typename T>
+		void ClearDequeInstance()
+		{
+			ComplexSingleton<ComplexDeque<T>>::DestroyInstance();
 		}
 
 	private:

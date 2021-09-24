@@ -185,6 +185,15 @@ namespace ComplexLibrary
 		}
 
 		/*
+		* @ brief db 연결여부를 확인한다.
+		* @ return 연결 성공 여부
+		*/
+		bool IsConnect() const
+		{
+			return m_bDBConnection;
+		}
+
+		/*
 		* @ brief 연결된 db를 해제한다.
 		* @ param 1 : 에러 텍스트
 		* @ return 해제 성공 여부

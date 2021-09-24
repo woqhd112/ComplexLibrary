@@ -94,7 +94,7 @@ namespace ComplexLibrary
 		void erase(T value)
 		{
 			if (find_value(m_root, value) == false)
-				throw "Not Found Key";
+				throw ComplexNotFoundException("set call key is not found.", "ComplexSet", "erase");
 
 			// 삭제는 메인 value가 지워지면 too가 그자리를 대체
 			// 크기는 too > 메인 > little 순이므로
@@ -146,7 +146,7 @@ namespace ComplexLibrary
 
 			bool bCheckChildLittle = false;
 			if (parent->m_little == nullptr && parent->m_too == nullptr)
-				throw "Not Found Key";
+				throw ComplexNotFoundException("set call key is not found.", "ComplexSet", "erase");
 			else if (parent->m_little != nullptr)
 			{
 				if (parent->m_little->value == value)

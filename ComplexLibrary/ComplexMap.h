@@ -179,7 +179,8 @@ namespace ComplexLibrary
 
 		bool erase(T key)
 		{
-			if (m_size <= 0) throw "Empty Map";
+			if (m_size <= 0)
+				throw ComplexIndexOutOfBoundsException("map size is zero.", "ComplexMap", "erase");
 
 			bool bFind = false;
 			int i = 0;
@@ -203,7 +204,8 @@ namespace ComplexLibrary
 
 		iterator find(T key)
 		{
-			if (m_size <= 0) throw "Empty Map";
+			if (m_size <= 0)
+				throw ComplexIndexOutOfBoundsException("map size is zero.", "ComplexMap", "find");
 
 			int i = 0;
 			for (i = 0; i < m_size; i++)
@@ -358,7 +360,8 @@ namespace ComplexLibrary
 				}
 			}
 
-			if (bOverlapKey) throw "Duplicate Key";
+			if (bOverlapKey)
+				throw ComplexDuplicateException("map insert key is duplicate.", "ComplexMap", "Duplicate");
 		}
 
 	};

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <initializer_list>
 #include "ComplexNode.h"
 
 namespace ComplexLibrary
@@ -80,10 +81,10 @@ namespace ComplexLibrary
 
 		void pop()
 		{
-			ComplexNode<T>* old = m_head;
-
 			if (m_head == nullptr)
-				return;
+				throw ComplexNullptrException("queue head node is null point.", "ComplexQueue", "pop");
+
+			ComplexNode<T>* old = m_head;
 
 			m_head = m_head->m_next;
 			delete old;
@@ -141,7 +142,7 @@ namespace ComplexLibrary
 			return *this;
 		}
 
-		ComplexQueue<T>& operator = (std::initializer_list<T> list)
+		ComplexQueue<T>& operator = (std::initializer_list<T>& list)
 		{
 			clear();
 			auto iter = list.begin();
@@ -150,6 +151,7 @@ namespace ComplexLibrary
 				push(*iter);
 				iter++;
 			}
+
 			return *this;
 		}
 

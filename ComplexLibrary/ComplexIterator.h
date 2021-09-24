@@ -22,6 +22,9 @@ namespace ComplexLibrary
 
 		ComplexIterator& operator ++ ()
 		{
+			if (m_cur == nullptr)
+				throw ComplexNullptrException("iterator reference is null point.", "ComplexIterator", "operator ++");
+
 			m_cur = m_cur->m_next;
 			return *this;
 		}

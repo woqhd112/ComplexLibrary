@@ -124,7 +124,7 @@ namespace ComplexLibrary
 			m_connectionQueue.push(poolData);
 			m_connectionQueue.unlock();
 			m_cond.Signal();
-			ComplexThread::Yield();
+			ComplexThread::YieldThread();
 
 			return poolID;
 		}
@@ -163,7 +163,7 @@ namespace ComplexLibrary
 				if (m_connectionQueue.empty())
 				{
 					m_connectionQueue.unlock();
-					ComplexThread::Yield();
+					ComplexThread::YieldThread();
 					continue;
 				}
 				poolData = m_connectionQueue.front();

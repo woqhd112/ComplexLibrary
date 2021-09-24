@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ComplexString.h"
+#include "ComplexConvert.h"
 #include <math.h>
 
 namespace ComplexLibrary
@@ -112,7 +113,7 @@ namespace ComplexLibrary
 			}
 			else if (cvt == CVT_STRING)
 			{
-				i_variant = atoi(s_variant.GetBuffer());
+				i_variant = ComplexConvert::StringToInt(s_variant);
 				s_variant = "";
 			}
 
@@ -139,7 +140,7 @@ namespace ComplexLibrary
 			}
 			else if (cvt == CVT_STRING)
 			{
-				f_variant = atof(s_variant.GetBuffer());
+				f_variant = ComplexConvert::StringToDouble(s_variant);
 				s_variant = "";
 			}
 
@@ -166,7 +167,7 @@ namespace ComplexLibrary
 			}
 			else if (cvt == CVT_STRING)
 			{
-				b_variant = static_cast<bool>(atoi(s_variant.GetBuffer()));
+				b_variant = static_cast<bool>(ComplexConvert::StringToInt(s_variant));
 				s_variant = "";
 			}
 
@@ -404,11 +405,11 @@ namespace ComplexLibrary
 			tmp = *this;
 			if (cvt == CVT_INT)
 			{
-				tmp.i_variant += atoi(variant);
+				tmp.i_variant += ComplexConvert::StringToInt(variant);
 			}
 			else if (cvt == CVT_DOUBLE)
 			{
-				tmp.f_variant += atof(variant);
+				tmp.f_variant += ComplexConvert::StringToDouble(variant);
 			}
 			else if (cvt == CVT_STRING)
 			{
@@ -423,11 +424,11 @@ namespace ComplexLibrary
 			tmp = *this;
 			if (cvt == CVT_INT)
 			{
-				tmp.i_variant += atoi(variant);
+				tmp.i_variant += ComplexConvert::StringToInt(variant);
 			}
 			else if (cvt == CVT_DOUBLE)
 			{
-				tmp.f_variant += atof(variant);
+				tmp.f_variant += ComplexConvert::StringToDouble(variant);
 			}
 			else if (cvt == CVT_STRING)
 			{
@@ -452,7 +453,7 @@ namespace ComplexLibrary
 				}
 				else if (variant.cvt == CVT_STRING)
 				{
-					tmp.i_variant += atoi(variant.s_variant);
+					tmp.i_variant += ComplexConvert::StringToInt(variant.s_variant);
 				}
 			}
 			else if (cvt == CVT_DOUBLE)
@@ -467,7 +468,7 @@ namespace ComplexLibrary
 				}
 				else if (variant.cvt == CVT_STRING)
 				{
-					tmp.f_variant += atof(variant.s_variant);
+					tmp.f_variant += ComplexConvert::StringToDouble(variant.s_variant);
 				}
 			}
 			else if (cvt == CVT_STRING)
@@ -534,11 +535,11 @@ namespace ComplexLibrary
 		{
 			if (cvt == CVT_INT)
 			{
-				i_variant += atoi(variant);
+				i_variant += ComplexConvert::StringToInt(variant);
 			}
 			else if (cvt == CVT_DOUBLE)
 			{
-				f_variant += atof(variant);
+				f_variant += ComplexConvert::StringToDouble(variant);
 			}
 			else if (cvt == CVT_STRING)
 			{
@@ -551,11 +552,11 @@ namespace ComplexLibrary
 		{
 			if (cvt == CVT_INT)
 			{
-				i_variant += atoi(variant);
+				i_variant += ComplexConvert::StringToInt(variant);
 			}
 			else if (cvt == CVT_DOUBLE)
 			{
-				f_variant += atof(variant);
+				f_variant += ComplexConvert::StringToDouble(variant);
 			}
 			else if (cvt == CVT_STRING)
 			{

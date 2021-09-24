@@ -35,7 +35,7 @@ namespace ComplexLibrary
 				return false;
 
 			if (!ReadHeader())
-				return false;
+				throw ComplexXMLParseException("XML header is unidentifiable.", __FUNCTION__, "Load");
 
 			EncodeDoc();
 
@@ -94,7 +94,7 @@ namespace ComplexLibrary
 				m_header = DEFINE_HEADER;
 
 			if (m_header != DEFINE_HEADER)
-				return false;
+				throw ComplexXMLParseException("XML header is damaged.", "ComplexXMLParsor", "Save");
 
 			ComplexString resultDoc = "";
 			DecodeDoc(resultDoc);
@@ -109,10 +109,10 @@ namespace ComplexLibrary
 			return true;
 		}
 
-		void ResetCurrnetPosition()
+		void ResetCurrentPosition()
 		{
 			if (m_processElem == nullptr)
-				return;
+				throw ComplexNullptrException("XML parser reference is null point.", "ComplexXMLParsor", "ResetCurrentPosition");
 
 			if (m_processElem->HasParentElement() == false)
 				m_processElem = &m_rootElem;
@@ -133,7 +133,7 @@ namespace ComplexLibrary
 		{
 			m_positionElem = m_processElem;
 			if (m_processElem == nullptr)
-				return;
+				throw ComplexNullptrException("XML parser reference is null point.", "ComplexXMLParsor", "AddElement");
 
 			ComplexXMLNode* newElem = new ComplexXMLNode;
 			newElem->SetElementName(elemName);
@@ -146,39 +146,34 @@ namespace ComplexLibrary
 			m_processElem->SetNextElement(newElem);
 		}
 
-		bool SetElementValue(ComplexString elemValue)
+		void SetElementValue(ComplexString elemValue)
 		{
 			if (m_processElem == nullptr)
-				return false;
+				throw ComplexNullptrException("XML parser reference is null point.", "ComplexXMLParsor", "SetElementValue");
 
 			m_processElem->SetElementValue(elemValue);
-			return true;
 		}
 
-		bool AddAttribute(ComplexString attrName, ComplexString attrValue)
+		void AddAttribute(ComplexString attrName, ComplexString attrValue)
 		{
 			if (m_processElem == nullptr)
-				return false;
+				throw ComplexNullptrException("XML parser reference is null point.", "ComplexXMLParsor", "AddAttribute");
 
 			m_processElem->AppendAttribute(attrName, attrValue);
-
-			return true;
 		}
 
-		bool SetAttribute(ComplexString attrName, ComplexString attrValue)
+		void SetAttribute(ComplexString attrName, ComplexString attrValue)
 		{
 			if (m_processElem == nullptr)
-				return false;
+				throw ComplexNullptrException("XML parser reference is null point.", "ComplexXMLParsor", "SetAttribute");
 
 			m_processElem->AppendAttribute(attrName, attrValue);
-
-			return true;
 		}
 
 		ComplexString GetAttribute(ComplexString attrName)
 		{
 			if (m_processElem == nullptr)
-				return "";
+				throw ComplexNullptrException("XML parser reference is null point.", "ComplexXMLParsor", "GetAttribute");
 
 			return m_processElem->GetAttribute(attrName);
 		}
@@ -186,7 +181,7 @@ namespace ComplexLibrary
 		ComplexString GetAttributeName(int idx)
 		{
 			if (m_processElem == nullptr)
-				return "";
+				throw ComplexNullptrException("XML parser reference is null point.", "ComplexXMLParsor", "GetAttributeName");
 
 			return m_processElem->FindKey(idx);
 		}
@@ -194,7 +189,7 @@ namespace ComplexLibrary
 		ComplexString GetElementName()
 		{
 			if (m_processElem == nullptr)
-				return "";
+				throw ComplexNullptrException("XML parser reference is null point.", "ComplexXMLParsor", "GetElementName");
 
 			return m_processElem->GetElementName();
 		}
@@ -202,7 +197,7 @@ namespace ComplexLibrary
 		ComplexString GetElementValue()
 		{
 			if (m_processElem == nullptr)
-				return "";
+				throw ComplexNullptrException("XML parser reference is null point.", "ComplexXMLParsor", "GetElementValue");
 
 			return m_processElem->GetElementValue();
 		}
@@ -210,7 +205,7 @@ namespace ComplexLibrary
 		bool IntoElement()
 		{
 			if (m_processElem == nullptr)
-				return false;
+				throw ComplexNullptrException("XML parser reference is null point.", "ComplexXMLParsor", "IntoElement");
 
 			if (m_processElem->HasChildElement() == false)
 				return false;
@@ -223,7 +218,7 @@ namespace ComplexLibrary
 		bool OutOfElement()
 		{
 			if (m_processElem == nullptr)
-				return false;
+				throw ComplexNullptrException("XML parser reference is null point.", "ComplexXMLParsor", "OutOfElement");
 
 			if (m_processElem->HasParentElement() == false)
 				return false;
@@ -236,7 +231,7 @@ namespace ComplexLibrary
 		bool RemoveElement()
 		{
 			if (m_processElem == nullptr)
-				return false;
+				throw ComplexNullptrException("XML parser reference is null point.", "ComplexXMLParsor", "RemoveElement");
 
 			m_positionElem = m_processElem;
 
@@ -285,7 +280,7 @@ namespace ComplexLibrary
 			resultDoc.Format("%s", m_header.GetBuffer());	// append header
 
 			if (currentElem == nullptr)
-				return;
+				throw ComplexNullptrException("XML parser reference is null point.", "ComplexXMLParsor", "OutputDoc");
 
 			resultDoc += "\n";
 			AppendElement(currentElem, resultDoc, depthTab);
@@ -432,7 +427,7 @@ namespace ComplexLibrary
 				return false;
 
 			if (open_tag != -1 && close_tag == -1)
-				throw "Not Close Annotation Tag";
+				throw ComplexXMLParseException("XML document is not close annotation tag.", "ComplexXMLParsor", "ValidateAnnotation");
 
 			ComplexString annotation_text = ComplexConvert::GetText(open_tag + 4, close_tag - 1, copy);
 			currentElem->SetAnnotation(true);
@@ -454,11 +449,11 @@ namespace ComplexLibrary
 				return false;
 			else if (open_tag != -1 && close_tag == -1)
 			{
-				throw "Not Close Tag";
+				throw ComplexXMLParseException("XML document is not close tag.", "ComplexXMLParsor", "ValidateTag");
 			}
 			else if (open_tag == -1 && close_tag != -1)
 			{
-				throw "Not Open Tag";
+				throw ComplexXMLParseException("XML document is not open tag.", "ComplexXMLParsor", "ValidateTag");
 			}
 
 			return true;

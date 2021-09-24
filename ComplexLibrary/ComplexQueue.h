@@ -81,10 +81,10 @@ namespace ComplexLibrary
 
 		void pop()
 		{
-			ComplexNode<T>* old = m_head;
-
 			if (m_head == nullptr)
-				return;
+				throw ComplexNullptrException("queue head node is null point.", "ComplexQueue", "pop");
+
+			ComplexNode<T>* old = m_head;
 
 			m_head = m_head->m_next;
 			delete old;

@@ -1,4 +1,7 @@
-﻿  ComplexLibrary.vcxproj -> C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\Debug\ComplexLibrary.lib
+﻿  pch.cpp
+  ComplexLibrary.cpp
+  sqlite3.c
+  ComplexLibrary.vcxproj -> C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\Debug\ComplexLibrary.lib
   C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\Debug\ComplexLibrary.lib
           1개 파일이 복사되었습니다.
   C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\ComplexCollection.h
@@ -7,6 +10,7 @@
   C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\ComplexConvert.h
   C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\ComplexDatabase.h
   C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\ComplexDeque.h
+  C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\ComplexException.h
   C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\ComplexFile.h
   C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\ComplexFormat.h
   C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\ComplexIn.h
@@ -42,4 +46,4 @@
   C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\pch.h
   C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\sqlite3.h
   C:\Users\user\Desktop\워크스페이스\work_vs2017\ComplexLibrary\ComplexLibrary\sqlite3ext.h
-         41개 파일이 복사되었습니다.
+         42개 파일이 복사되었습니다.

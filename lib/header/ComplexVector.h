@@ -145,8 +145,10 @@ namespace ComplexLibrary
 
 		T& at(int idx)
 		{
-			if (m_size <= 0) throw "Index Out of Bound";
-			if ((m_size - 1) < idx) throw "Index Out of Bound";
+			if (m_size <= 0)
+				throw ComplexIndexOutOfBoundsException("vector size is zero.", "ComplexVector", "at");
+			if ((m_size - 1) < idx)
+				ComplexIndexOutOfBoundsException("vector call index is out of bounds.", "ComplexVector", "at");
 
 			return m_ptr[idx];
 		}
@@ -173,7 +175,8 @@ namespace ComplexLibrary
 
 		void erase(iterator iter)
 		{
-			if (m_size <= 0) throw "Index Out of Bound";
+			if (m_size <= 0)
+				throw ComplexIndexOutOfBoundsException("vector size is zero.", "ComplexVector", "erase");
 
 			bool bFind = false;
 			int i = 0;
@@ -192,8 +195,10 @@ namespace ComplexLibrary
 
 		void erase(int idx)
 		{
-			if (m_size <= 0) throw "Index Out of Bound";
-			if ((m_size - 1) < idx) throw "Index Out of Bound";
+			if (m_size <= 0)
+				throw ComplexIndexOutOfBoundsException("vector size is zero.", "ComplexVector", "erase");
+			if ((m_size - 1) < idx)
+				throw ComplexIndexOutOfBoundsException("vector call index is out of bounds.", "ComplexVector", "erase");
 
 			delete_node(m_ptr[idx]);
 
@@ -220,10 +225,14 @@ namespace ComplexLibrary
 
 		void erase(int startidx, int endidx)
 		{
-			if (m_size <= 0) throw "Index Out of Bound";
-			if ((m_size - 1) < startidx) throw "Index Out of Bound";
-			if ((m_size - 1) < endidx) throw "Index Out of Bound";
-			if (endidx < startidx) throw "Index Out of Bound";
+			if (m_size <= 0)
+				throw ComplexIndexOutOfBoundsException("vector size is zero.", "ComplexVector", "erase");
+			if ((m_size - 1) < startidx)
+				throw ComplexIndexOutOfBoundsException("vector call start index is out of bounds.", "ComplexVector", "erase");
+			if ((m_size - 1) < endidx)
+				throw ComplexIndexOutOfBoundsException("vector call end index is out of bounds.", "ComplexVector", "erase");
+			if (endidx < startidx)
+				throw ComplexIndexOutOfBoundsException("vector call start index is more than call end index.", "ComplexVector", "erase");
 
 			T* tmp = new T[m_capacity];
 			int tmpidx = 0;

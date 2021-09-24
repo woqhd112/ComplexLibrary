@@ -41,6 +41,9 @@
     <Filter Include="Process\IO">
       <UniqueIdentifier>{abdefa7a-1fc7-4b00-bc35-37d26101b174}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Exception">
+      <UniqueIdentifier>{eb9d3443-a67a-4d00-82bf-fe03b770a6a8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ComplexLinkedList.h">
@@ -103,12 +106,6 @@
     <ClInclude Include="ComplexDatabase.h">
       <Filter>DBSQLite3</Filter>
     </ClInclude>
-    <ClInclude Include="sqlite3.h">
-      <Filter>DBSQLite3</Filter>
-    </ClInclude>
-    <ClInclude Include="sqlite3ext.h">
-      <Filter>DBSQLite3</Filter>
-    </ClInclude>
     <ClInclude Include="ComplexLog.h">
       <Filter>Log</Filter>
     </ClInclude>
@@ -165,6 +162,15 @@
     </ClInclude>
     <ClInclude Include="ComplexDeque.h">
       <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="ComplexException.h">
+      <Filter>Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="sqlite3.h">
+      <Filter>DBSQLite3</Filter>
+    </ClInclude>
+    <ClInclude Include="sqlite3ext.h">
+      <Filter>DBSQLite3</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

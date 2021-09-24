@@ -2,8 +2,6 @@
 #include <string>
 #include <iostream>
 
-#include "ComplexVector.h"
-#include "ComplexLinkedList.h"
 #include "ComplexFormat.h"
 
 #define USE_MYFORMAT	1
@@ -84,16 +82,16 @@ namespace ComplexLibrary
 
 		char GetAt(int idx)
 		{
-			if (idx < 0) return 0;
-			if (idx > (m_size - 1)) return 0;
+			if (idx < 0 || idx >(m_size - 1))
+				return 0;
 
 			return m_buf[idx];
 		}
 
 		void SetAt(int idx, char c)
 		{
-			if (idx < 0) return;
-			if (idx > (m_size - 1 - 1)) return;
+			if (idx < 0 || idx >(m_size - 1 - 1))
+				return;
 
 			m_buf[idx] = c;
 		}
@@ -116,7 +114,7 @@ namespace ComplexLibrary
 			//int format_size = strlen(format) + 1 + 1 + 1;
 
 
-	#if USE_MYFORMAT
+#if USE_MYFORMAT
 			ComplexFormat formatting;
 			const char* tmp = formatting.GetFormatString(format, args);
 
@@ -130,7 +128,7 @@ namespace ComplexLibrary
 			{
 				m_buf[i] = tmp[i];
 			}
-	#elif
+#elif
 			char tmp[4096];
 
 			m_size = static_cast<int>(vsnprintf(tmp, 4096, format, args) + 1);
@@ -143,7 +141,7 @@ namespace ComplexLibrary
 			{
 				m_buf[i] = tmp[i];
 			}
-	#endif
+#endif
 			m_buf[m_size - 1] = '\0';
 
 			__crt_va_end(args);
@@ -154,15 +152,15 @@ namespace ComplexLibrary
 			va_list args;
 			__crt_va_start(args, format);
 
-	#if USE_MYFORMAT
+#if USE_MYFORMAT
 			ComplexFormat formatting;
 			const char* tmp = formatting.GetFormatString(format, args);
 
 			int arg_size = strlen(tmp) + 1;
-	#elif
+#elif
 			char tmp[4096];
 			int arg_size = static_cast<int>(vsnprintf(tmp, 4096, format, args) + 1);
-	#endif
+#endif
 
 			int before_size = m_size;
 			char* before_buf = new char[m_size];
@@ -317,50 +315,6 @@ namespace ComplexLibrary
 
 			return find_index;
 		}
-
-		/*bool Split(ComplexLinkedList<ComplexString>& contain, char div)
-		{
-			int find_cnt = 0;
-			for (int i = 0; i < this->GetLength(); i++)
-			{
-				if (m_buf[i] == div)
-				{
-					find_cnt++;
-				}
-			}
-
-			if (find_cnt <= 0)
-				return false;
-
-			if (loopSplit(contain, m_buf, div, 0) == false)
-			{
-				if (contain.empty())
-					return false;
-			}
-			return true;
-		}
-
-		bool Split(ComplexVector<ComplexString>& contain, char div)
-		{
-			int find_cnt = 0;
-			for (int i = 0; i < this->GetLength(); i++)
-			{
-				if (m_buf[i] == div)
-				{
-					find_cnt++;
-				}
-			}
-
-			if (find_cnt <= 0)
-				return false;
-
-			if (loopSplit(contain, m_buf, div, 0) == false)
-			{
-				if (contain.empty())
-					return false;
-			}
-			return true;
-		}*/
 
 		bool Erase(int index)
 		{
@@ -765,8 +719,8 @@ namespace ComplexLibrary
 			return (strcmp(m_buf, buf) != 0) ? true : false;
 		}
 
-		friend std::istream& operator >> (std::istream& cin, ComplexString& buf);
-		friend std::ostream& operator << (std::ostream& cout, ComplexString& buf);
+		friend static std::istream& operator >> (std::istream& cin, ComplexString& buf);
+		friend static std::ostream& operator << (std::ostream& cout, ComplexString& buf);
 
 	private:
 
@@ -806,129 +760,6 @@ namespace ComplexLibrary
 			return loopFind(findbuf, find_index, h);
 		}
 
-		/*bool loopSplit(ComplexLinkedList<ComplexString>& contain, const char* buf, char div, int matrix_cnt)
-		{
-			ComplexString preFindString, sufFindString;
-			char* tmp1 = new char[this->GetLength() + 1];
-			char* tmp2 = new char[this->GetLength() + 1];
-			bool bFind = false;
-
-			int buf_idx = 0;
-			int pre_len = 0;
-			int suf_len = 0;
-			bool oneFind = true;
-
-			for (int i = 0; i < static_cast<int>(strlen(buf)); i++)
-			{
-				if (buf[i] == div)
-				{
-					bFind = true;
-					if (oneFind)
-					{
-						buf_idx = 0;
-						continue;
-					}
-
-				}
-
-				if (bFind)
-				{
-					tmp2[buf_idx] = buf[i];
-					buf_idx++;
-					suf_len++;
-					oneFind = false;
-				}
-				else
-				{
-					tmp1[buf_idx] = buf[i];
-					buf_idx++;
-					pre_len++;
-				}
-			}
-
-			tmp1[pre_len] = '\0';
-			tmp2[suf_len] = '\0';
-
-			preFindString = tmp1;
-			sufFindString = tmp2;
-			delete[] tmp1;
-			delete[] tmp2;
-
-
-			contain.push_tail(preFindString);
-
-			if (sufFindString.m_size <= 1)
-				return false;
-
-			return loopSplit(contain, sufFindString.m_buf, div, matrix_cnt + 1);
-		}
-
-		bool loopSplit(ComplexVector<ComplexString>& contain, const char* buf, char div, int matrix_cnt)
-		{
-			ComplexString preFindString, sufFindString;
-			char* tmp1 = new char[this->GetLength() + 1];
-			char* tmp2 = new char[this->GetLength() + 1];
-			bool bFind = false;
-
-			int buf_idx = 0;
-			int pre_len = 0;
-			int suf_len = 0;
-			bool oneFind = true;
-
-			for (int i = 0; i < static_cast<int>(strlen(buf)); i++)
-			{
-				if (buf[i] == div)
-				{
-					bFind = true;
-					if (oneFind)
-					{
-						buf_idx = 0;
-						continue;
-					}
-
-				}
-
-				if (bFind)
-				{
-					tmp2[buf_idx] = buf[i];
-					buf_idx++;
-					suf_len++;
-					oneFind = false;
-				}
-				else
-				{
-					tmp1[buf_idx] = buf[i];
-					buf_idx++;
-					pre_len++;
-				}
-			}
-
-			tmp1[pre_len] = '\0';
-			tmp2[suf_len] = '\0';
-
-			preFindString = tmp1;
-			sufFindString = tmp2;
-			delete[] tmp1;
-			delete[] tmp2;
-
-			if (preFindString.m_size <= 1)
-				return false;
-
-			contain.push_back(preFindString);
-
-			if (sufFindString.m_size <= 1)
-				return false;
-
-			if (loopSplit(contain, sufFindString.m_buf, div, matrix_cnt + 1) == false)
-			{
-				if (contain.size() == 0)
-					return false;
-			}
-
-			return true;
-		}*/
-
-
 	private:
 
 		int m_size;
@@ -936,7 +767,7 @@ namespace ComplexLibrary
 
 	};
 
-	std::istream& operator >> (std::istream& cin, ComplexString& buf)
+	static std::istream& operator >> (std::istream& cin, ComplexString& buf)
 	{
 		char str[100];
 		cin >> str;
@@ -944,7 +775,7 @@ namespace ComplexLibrary
 		return cin;
 	}
 
-	std::ostream& operator << (std::ostream& cout, ComplexString& buf)
+	static std::ostream& operator << (std::ostream& cout, ComplexString& buf)
 	{
 		cout << buf.GetBuffer();
 		return cout;

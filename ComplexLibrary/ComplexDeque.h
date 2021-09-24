@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ComplexException.h"
 
 namespace ComplexLibrary
 {
@@ -47,9 +48,9 @@ namespace ComplexLibrary
 		void push_back(T value)
 		{
 			if (m_ptr == nullptr)
-				throw "Index Out of Bound";
+				throw ComplexNullptrException("deque member reference is null point.", "ComplexDeque", "push_back");
 			if (full())
-				throw "Index Out of Bound";
+				throw ComplexCapacityOverflowException("deque capacity is overflow.", "ComplexDeque", "push_back");
 
 			m_back_index = (m_back_index + 1) % m_maxSize;
 			m_ptr[m_back_index] = value;
@@ -59,9 +60,9 @@ namespace ComplexLibrary
 		void push_front(T value)
 		{
 			if (m_ptr == nullptr)
-				throw "Index Out of Bound";
+				throw ComplexNullptrException("deque member reference is null point.", "ComplexDeque", "push_front");
 			if (full())
-				throw "Index Out of Bound";
+				throw ComplexCapacityOverflowException("deque capacity is overflow.", "ComplexDeque", "push_front");
 
 			m_ptr[m_front_index] = value;
 			m_front_index = (m_front_index - 1 + m_maxSize) % m_maxSize;
@@ -71,9 +72,9 @@ namespace ComplexLibrary
 		void pop_front()
 		{
 			if (m_ptr == nullptr)
-				throw "Index Out of Bound";
+				throw ComplexNullptrException("deque member reference is null point.", "ComplexDeque", "pop_front");
 			if (m_front_index == 0)
-				throw "Index Out of Bound";
+				throw ComplexCapacityOverflowException("deque capacity is overflow.", "ComplexDeque", "pop_front");
 
 			m_front_index = (m_front_index + 1) % m_maxSize;
 			m_size--;
@@ -82,9 +83,9 @@ namespace ComplexLibrary
 		void pop_back()
 		{
 			if (m_ptr == nullptr)
-				throw "Index Out of Bound";
+				throw ComplexNullptrException("deque member reference is null point.", "ComplexDeque", "pop_back");
 			if (m_back_index == 0)
-				throw "Index Out of Bound";
+				throw ComplexCapacityOverflowException("deque capacity is overflow.", "ComplexDeque", "pop_back");
 
 			m_back_index = (m_back_index - 1 + m_maxSize) % m_maxSize;
 			m_size--;
@@ -93,13 +94,13 @@ namespace ComplexLibrary
 		T& at(int index)
 		{
 			if (m_ptr == nullptr)
-				throw "Index Out of Bound";
+				throw ComplexNullptrException("deque member reference is null point.", "ComplexDeque", "at");
 			if (index < 0)
-				throw "Index Out of Bound";
+				throw ComplexIndexOutOfBoundsException("deque call index is zero or less.", "ComplexDeque", "at");
 			if (index > m_maxSize)
-				throw "Index Out of Bound";
+				throw ComplexIndexOutOfBoundsException("deque call index is maxsize out of bounds.", "ComplexDeque", "at");
 			if (m_size == 0)
-				throw "Index Out of Bound";
+				throw ComplexIndexOutOfBoundsException("deque size is zero.", "ComplexDeque", "at");
 
 			int find_index = 0;
 			if (m_front_index == 0)
@@ -114,9 +115,9 @@ namespace ComplexLibrary
 		T& front()
 		{
 			if (m_ptr == nullptr)
-				throw "Index Out of Bound";
+				throw ComplexNullptrException("deque member reference is null point.", "ComplexDeque", "front");
 			if (m_front_index == 0)
-				throw "Index Out of Bound";
+				throw ComplexCapacityOverflowException("deque capacity is overflow.", "ComplexDeque", "front");
 
 			return m_ptr[(m_front_index + 1) % m_maxSize];
 		}
@@ -124,9 +125,9 @@ namespace ComplexLibrary
 		T& back()
 		{
 			if (m_ptr == nullptr)
-				throw "Index Out of Bound";
+				throw ComplexNullptrException("deque member reference is null point.", "ComplexDeque", "back");
 			if (m_back_index == 0)
-				throw "Index Out of Bound";
+				throw ComplexCapacityOverflowException("deque capacity is overflow.", "ComplexDeque", "back");
 
 			return m_ptr[m_back_index];
 		}

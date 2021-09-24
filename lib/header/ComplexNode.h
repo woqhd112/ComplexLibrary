@@ -1,5 +1,7 @@
 #pragma once
 
+#include "ComplexException.h"
+
 namespace ComplexLibrary
 {
 	template <typename T> class ComplexNodeSet;
@@ -33,6 +35,9 @@ namespace ComplexLibrary
 
 		ComplexNode<T>* next()
 		{
+			if (this == nullptr)
+				throw ComplexNullptrException("node is null point.", "ComplexNode", "next");
+
 			return this->m_next;
 		}
 

@@ -25,6 +25,22 @@ namespace ComplexLibrary
 
 		}
 
+		bool Exist(ComplexString path)
+		{
+			std::ifstream read_file;
+			std::ofstream write_file;
+			read_file.open(path);
+			if (read_file.fail())
+			{
+				write_file.open(path);
+				write_file.close();
+				return false;
+			}
+
+			read_file.close();
+			return true;
+		}
+
 		ComplexString GetPath() const
 		{
 			return m_filePath;

@@ -2,6 +2,7 @@
 
 #include "ComplexString.h"
 #include "ComplexStack.h"
+#include "ComplexException.h"
 
 
 namespace ComplexLibrary
@@ -64,9 +65,14 @@ namespace ComplexLibrary
 			int count = 0;
 			for (int i = size - 1; i >= 0; i--)
 			{
-				int su = buf[i] - 48;
-				total += (su * static_cast<int>(pow(10, count)));
-				count++;
+				if (buf[i] >= 48 && buf[i] <= 57)
+				{
+					int su = buf[i] - 48;
+					total += (su * static_cast<int>(pow(10, count)));
+					count++;
+				}
+				else
+					throw ComplexNumberFormatException("string buffer format is not number.", "ComplexConvert", "StringToInt");
 			}
 
 			return total;
@@ -277,7 +283,7 @@ namespace ComplexLibrary
 			ComplexStack<char> totalBase;
 
 			strText = strOutput;
-			nBase = atoi(strText.GetBuffer());
+			nBase = StringToInt(strText);
 
 			while (true)
 			{
