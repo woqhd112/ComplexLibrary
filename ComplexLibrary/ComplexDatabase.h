@@ -147,6 +147,16 @@ namespace ComplexLibrary
 			return error;
 		}
 
+		ComplexString GetErrorText() const
+		{
+			return m_errorText;
+		}
+
+		int GetErrorType() const
+		{
+			return m_errorType;
+		}
+
 		ComplexDatabase()
 			: m_bDBConnection(false)
 			, m_bPrepareStatement(false)
@@ -167,11 +177,11 @@ namespace ComplexLibrary
 		* @ param 1 : 에러 텍스트
 		* @ return 연결 성공 여부
 		*/
-		bool ConnectDatabase(ComplexString fileName, ComplexString* error = NULL)
+		bool ConnectDatabase(ComplexString fileName)
 		{
 			int isOpen = sqlite3_open(fileName.GetBuffer(), &m_dbHandler);
-			if (error != NULL)
-				*error = GetErrorCode(isOpen);
+
+			m_errorText = GetErrorCode(isOpen);
 			if (isOpen != SQLITE_OK)
 			{
 				sqlite3_close(m_dbHandler);
@@ -198,14 +208,13 @@ namespace ComplexLibrary
 		* @ param 1 : 에러 텍스트
 		* @ return 해제 성공 여부
 		*/
-		bool DisConnectDatabase(ComplexString* error = NULL)
+		bool DisConnectDatabase()
 		{
 			if (m_bDBConnection)
 			{
 				int errorcode = sqlite3_close(m_dbHandler);
 				m_bDBConnection = false;
-				if (error != NULL)
-					*error = GetErrorCode(errorcode);
+				m_errorText = GetErrorCode(errorcode);
 				return true;
 			}
 
@@ -221,7 +230,7 @@ namespace ComplexLibrary
 		*		  4 : 에러 텍스트
 		* @ return 쿼리문 성공 여부
 		*/
-		bool PrepareStatement_Execute(ComplexString query, void(*SetPrepareStatement)(), void(*ResultSet)(), ComplexString* error = NULL)
+		bool PrepareStatement_Execute(ComplexString query, void(*SetPrepareStatement)(), void(*ResultSet)())
 		{
 			if (!m_bDBConnection)
 				return false;
@@ -236,6 +245,8 @@ namespace ComplexLibrary
 			}
 
 			int result = sqlite3_prepare_v2(m_dbHandler, query.GetBuffer(), -1, &m_queryHandler, 0);
+			m_errorText = GetErrorCode(result);
+
 			if (result == SQLITE_OK)
 			{
 				m_bPrepareStatement = true;
@@ -254,8 +265,9 @@ namespace ComplexLibrary
 				m_bPrepareStatement = false;
 				m_bResultSet = false;
 			}
-			if (error != NULL)
-				*error = GetErrorCode(result);
+			else
+				return false;
+
 
 			return true;
 		}
@@ -270,14 +282,22 @@ namespace ComplexLibrary
 		* 만약 리턴이 여러개의 튜플일 경우 해당 콜백함수가 여러번 호출됨
 		* @ return 쿼리문 성공 여부
 		*/
-		bool ExecuteQuery(ComplexString query, sqlite3_callback query_callback, ComplexString* error = NULL)
+		bool ExecuteQuery(ComplexString query, sqlite3_callback query_callback)
 		{
 			if (!m_bDBConnection)
 				return false;
 
-			int result = sqlite3_exec(m_dbHandler, query, query_callback, 0, 0);
-			if (error != NULL)
-				*error = GetErrorCode(result);
+			if (!m_bUseAutoCommit)
+			{
+				if (m_nCommitStartCount == 0)
+					sqlite3_exec(m_dbHandler, "BEGIN IMMEDIATE TRANSACTION;", NULL, NULL, NULL);
+			}
+
+			int result = sqlite3_exec(m_dbHandler, query.GetBuffer(), query_callback, 0, 0);
+
+			m_errorText = GetErrorCode(result);
+			if (result != SQLITE_OK)
+				return false;
 
 			return true;
 		}
@@ -290,7 +310,7 @@ namespace ComplexLibrary
 		*		  3 : 에러 텍스트
 		* @ return 쿼리문 성공 여부
 		*/
-		bool PrepareStatement_Execute(ComplexString query, void(*SetPrepareStatement)(), ComplexString* error = NULL)
+		bool PrepareStatement_Execute(ComplexString query, void(*SetPrepareStatement)())
 		{
 			if (!m_bDBConnection)
 				return false;
@@ -305,6 +325,7 @@ namespace ComplexLibrary
 				return false;
 
 			int result = sqlite3_prepare_v2(m_dbHandler, query.GetBuffer(), -1, &m_queryHandler, 0);
+			m_errorText = GetErrorCode(result);
 			if (result == SQLITE_OK)
 			{
 				m_bPrepareStatement = true;
@@ -316,8 +337,9 @@ namespace ComplexLibrary
 				m_queryHandler = NULL;
 				m_bPrepareStatement = false;
 			}
-			if (error != NULL)
-				*error = GetErrorCode(result);
+			else
+				return false;
+
 			return true;
 		}
 
@@ -327,14 +349,13 @@ namespace ComplexLibrary
 		*         2 : ? 의 값 ('이나 \" 는 붙이지말고 전송)
 		*		  3 : 에러 텍스트
 		*/
-		void SetString(int prepare_index, ComplexString value, ComplexString* error = NULL)
+		void SetString(int prepare_index, ComplexString value)
 		{
 			if (!m_bPrepareStatement)
 				return;
 
 			int result = sqlite3_bind_text(m_queryHandler, prepare_index, value.GetBuffer(), -1, SQLITE_TRANSIENT);	// SQLITE_TRANSIENT 는 통째로 복사하여 전달. / SQLITE_STATIC 은 주소값만 복사해서 전달
-			if (error != NULL)
-				*error = GetErrorCode(result);
+			m_errorText = GetErrorCode(result);
 		}
 
 		/*
@@ -343,14 +364,13 @@ namespace ComplexLibrary
 		*         2 : ? 의 값
 		*		  3 : 에러 텍스트
 		*/
-		void SetInt(int prepare_index, int value, ComplexString* error = NULL)
+		void SetInt(int prepare_index, int value)
 		{
 			if (!m_bPrepareStatement)
 				return;
 
 			int result = sqlite3_bind_int(m_queryHandler, prepare_index, value);
-			if (error != NULL)
-				*error = GetErrorCode(result);
+			m_errorText = GetErrorCode(result);
 		}
 
 		/*
@@ -359,14 +379,13 @@ namespace ComplexLibrary
 		*         2 : ? 의 값
 		* @		  3 : 에러 텍스트
 		*/
-		void SetDouble(int prepare_index, double value, ComplexString* error = NULL)
+		void SetDouble(int prepare_index, double value)
 		{
 			if (!m_bPrepareStatement)
 				return;
 
 			int result = sqlite3_bind_double(m_queryHandler, prepare_index, value);
-			if (error != NULL)
-				*error = GetErrorCode(result);
+			m_errorText = GetErrorCode(result);
 		}
 
 		/*
@@ -421,13 +440,12 @@ namespace ComplexLibrary
 		* @ brief 오토커밋 미적용일 때 수행. 지금까지 적용한 쿼리문을 커밋한다.
 		* @ param 1 : 에러 텍스트
 		*/
-		void Commit(ComplexString* error = NULL)
+		void Commit()
 		{
 			if (!m_bUseAutoCommit)
 			{
 				int result = sqlite3_exec(m_dbHandler, "COMMIT TRANSACTION;", NULL, NULL, NULL);
-				if (error != NULL)
-					*error = GetErrorCode(result);
+				m_errorText = GetErrorCode(result);
 				m_nCommitStartCount = 0;
 			}
 		}
@@ -437,7 +455,7 @@ namespace ComplexLibrary
 		* @ param 1 : 롤백할 세이브 포인트 이름. (값을 입력하지 않으면 초기로 돌아간다.)
 		* @ param 2 : 에러 텍스트
 		*/
-		void Rollback(ComplexString savepoint_name = "", ComplexString* error = NULL)
+		void Rollback(ComplexString savepoint_name = "")
 		{
 			if (!m_bUseAutoCommit)
 			{
@@ -452,8 +470,7 @@ namespace ComplexLibrary
 					query.Format("ROLLBACK TO %s;", savepoint_name.GetBuffer());
 					result = sqlite3_exec(m_dbHandler, query, NULL, NULL, NULL);
 				}
-				if (error != NULL)
-					*error = GetErrorCode(result);
+				m_errorText = GetErrorCode(result);
 				m_nCommitStartCount = 0;
 			}
 		}
@@ -463,15 +480,14 @@ namespace ComplexLibrary
 		* @ param 1 : 설정할 세이브 포인트 이름.
 		* @ param 2 : 에러 텍스트
 		*/
-		void SetSavePoint(ComplexString savepoint_name, ComplexString* error = NULL)
+		void SetSavePoint(ComplexString savepoint_name)
 		{
 			if (!m_bUseAutoCommit)
 			{
 				ComplexString query;
 				query.Format("SAVEPOINT %s;", savepoint_name.GetBuffer());
 				int result = sqlite3_exec(m_dbHandler, query.GetBuffer(), NULL, NULL, NULL);
-				if (error != NULL)
-					*error = GetErrorCode(result);
+				m_errorText = GetErrorCode(result);
 			}
 		}
 
@@ -480,15 +496,14 @@ namespace ComplexLibrary
 		* @ param 1 : 해제할 세이브 포인트 이름.
 		* @ param 2 : 에러 텍스트
 		*/
-		void ReleaseSavePoint(ComplexString savepoint_name, ComplexString* error = NULL)
+		void ReleaseSavePoint(ComplexString savepoint_name)
 		{
 			if (!m_bUseAutoCommit)
 			{
 				ComplexString query;
 				query.Format("RELEASE %s;", savepoint_name.GetBuffer());
 				int result = sqlite3_exec(m_dbHandler, query.GetBuffer(), NULL, NULL, NULL);
-				if (error != NULL)
-					*error = GetErrorCode(result);
+				m_errorText = GetErrorCode(result);
 			}
 		}
 
@@ -496,6 +511,9 @@ namespace ComplexLibrary
 
 		sqlite3*		m_dbHandler;			// 데이터베이스 핸들
 		sqlite3_stmt*	m_queryHandler;			// 쿼리문 핸들
+
+		ComplexString	m_errorText;
+		int				m_errorType;
 
 		bool			m_bDBConnection;		// db 연결 여부
 		bool			m_bPrepareStatement;	// preparestatement 사용 여부
