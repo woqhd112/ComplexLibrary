@@ -173,6 +173,7 @@ copy $(ProjectDir)*.h $(SolutionDir)lib\header\.</Command>
     <ClInclude Include="ComplexLock.h" />
     <ClInclude Include="ComplexLog.h" />
     <ClInclude Include="ComplexMap.h" />
+    <ClInclude Include="ComplexMemory.h" />
     <ClInclude Include="ComplexNode.h" />
     <ClInclude Include="ComplexConvert.h" />
     <ClInclude Include="ComplexOut.h" />

@@ -172,6 +172,9 @@
     <ClInclude Include="sqlite3ext.h">
       <Filter>DBSQLite3</Filter>
     </ClInclude>
+    <ClInclude Include="ComplexMemory.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ComplexLibrary.cpp">
