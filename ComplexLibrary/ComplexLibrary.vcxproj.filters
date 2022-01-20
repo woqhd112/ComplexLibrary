@@ -192,4 +192,9 @@
       <Filter>DBSQLite3</Filter>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="ComplexLibrary.natvis">
+      <Filter>소스 파일</Filter>
+    </Natvis>
+  </ItemGroup>
 </Project>

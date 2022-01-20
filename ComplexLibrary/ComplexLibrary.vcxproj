@@ -219,6 +219,11 @@ copy $(ProjectDir)*.h $(SolutionDir)lib\header\.</Command>
   <ItemGroup>
     <None Include="sqlite3.def" />
   </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="ComplexLibrary.natvis">
+      <SubType>Designer</SubType>
+    </Natvis>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
